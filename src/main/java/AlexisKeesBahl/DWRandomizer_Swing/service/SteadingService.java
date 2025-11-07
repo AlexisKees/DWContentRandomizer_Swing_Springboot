@@ -1,20 +1,20 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.DetailsArrays;
-import dw.randomizer.data.SteadingArrays;
-import dw.randomizer.model.Steading;
-import dw.randomizer.presentation.ViewAll;
-import dw.randomizer.repository.SteadingRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.data.SteadingArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Steading;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.SteadingRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.PickFrom;
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class SteadingService implements IGenericService<Steading>, IGenericCRUDService<Steading> {

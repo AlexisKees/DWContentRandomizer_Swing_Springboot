@@ -1,6 +1,6 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.model.IPWClass;
+import AlexisKeesBahl.DWRandomizer_Swing.model.IPWClass;
 
 import java.io.File;
 import java.io.FileWriter;

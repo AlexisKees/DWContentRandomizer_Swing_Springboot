@@ -1,6 +1,6 @@
-package dw.randomizer.repository;
+package AlexisKeesBahl.DWRandomizer_Swing.repository;
 
-import dw.randomizer.model.Quest;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

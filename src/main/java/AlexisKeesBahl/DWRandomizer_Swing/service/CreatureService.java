@@ -1,12 +1,12 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.CreatureArrays;
-import dw.randomizer.data.DetailsArrays;
-import dw.randomizer.model.Creature;
-import dw.randomizer.presentation.ViewAll;
-import dw.randomizer.repository.CreatureRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.data.CreatureArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Creature;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.CreatureRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.*;
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.*;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class CreatureService implements IGenericService<Creature>, IGenericCRUDService<Creature> {

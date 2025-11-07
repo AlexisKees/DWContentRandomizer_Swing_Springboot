@@ -1,4 +1,4 @@
-package dw.randomizer.data;
+package AlexisKeesBahl.DWRandomizer_Swing.data;
 
 public class NPCNamesArrays {
 

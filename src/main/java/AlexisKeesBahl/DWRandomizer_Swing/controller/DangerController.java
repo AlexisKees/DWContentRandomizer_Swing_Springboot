@@ -1,7 +1,7 @@
-package dw.randomizer.controller;
+package AlexisKeesBahl.DWRandomizer_Swing.controller;
 
-import dw.randomizer.model.Danger;
-import dw.randomizer.service.DangerService;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Danger;
+import AlexisKeesBahl.DWRandomizer_Swing.service.DangerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

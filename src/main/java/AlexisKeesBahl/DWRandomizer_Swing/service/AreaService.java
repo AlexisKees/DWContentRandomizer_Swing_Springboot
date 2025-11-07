@@ -1,13 +1,13 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.DungeonArrays;
-import dw.randomizer.model.Area;
-import dw.randomizer.model.AreaDanger;
-import dw.randomizer.model.AreaDiscovery;
-import dw.randomizer.presentation.ViewAll;
-import dw.randomizer.repository.AreaRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DungeonArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
+import AlexisKeesBahl.DWRandomizer_Swing.model.AreaDanger;
+import AlexisKeesBahl.DWRandomizer_Swing.model.AreaDiscovery;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.AreaRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.*;
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.*;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class AreaService implements IGenericService<Area>, IGenericCRUDService<Area> {

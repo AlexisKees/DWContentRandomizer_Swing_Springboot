@@ -1,6 +1,6 @@
-package dw.randomizer;
+package AlexisKeesBahl.DWRandomizer_Swing;
 
-import dw.randomizer.presentation.Main;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

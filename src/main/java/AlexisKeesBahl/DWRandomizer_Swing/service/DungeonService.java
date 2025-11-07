@@ -1,13 +1,13 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.DungeonArrays;
-import dw.randomizer.model.Dungeon;
-import dw.randomizer.model.Steading;
-import dw.randomizer.model.util.Rolls;
-import dw.randomizer.presentation.ViewAll;
-import dw.randomizer.repository.DungeonRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DungeonArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Dungeon;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Steading;
+import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.DungeonRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.PickFrom;
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Slf4j
 @Service

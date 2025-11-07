@@ -1,6 +1,6 @@
-package dw.randomizer.service.crud;
+package AlexisKeesBahl.DWRandomizer_Swing.service.crud;
 
-import dw.randomizer.model.IPWClass;
+import AlexisKeesBahl.DWRandomizer_Swing.model.IPWClass;
 
 import java.util.List;
 

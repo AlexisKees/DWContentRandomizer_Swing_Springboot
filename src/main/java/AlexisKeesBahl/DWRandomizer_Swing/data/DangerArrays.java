@@ -1,4 +1,4 @@
-package dw.randomizer.data;
+package AlexisKeesBahl.DWRandomizer_Swing.data;
 
 public class DangerArrays {
     /* ========== 1) CATEGORIES (d12 → 0..11) ========== */

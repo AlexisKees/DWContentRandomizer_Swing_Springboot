@@ -1,6 +1,6 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.model.*;
+import AlexisKeesBahl.DWRandomizer_Swing.model.*;
 
 import java.util.Scanner;
 

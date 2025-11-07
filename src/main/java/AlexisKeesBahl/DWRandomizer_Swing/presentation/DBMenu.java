@@ -1,18 +1,17 @@
-package dw.randomizer.presentation;
+package AlexisKeesBahl.DWRandomizer_Swing.presentation;
 
-import dw.randomizer.model.IPWClass;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.ClassIdentifier;
-import dw.randomizer.service.util.Factory;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.model.IPWClass;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.ClassIdentifier;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.Factory;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 import java.util.List;
 import java.util.Scanner;
 
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Component
 public class DBMenu<T extends IPWClass> {

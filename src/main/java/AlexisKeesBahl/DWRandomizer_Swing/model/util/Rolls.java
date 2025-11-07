@@ -1,4 +1,4 @@
-package dw.randomizer.model.util;
+package AlexisKeesBahl.DWRandomizer_Swing.model.util;
 
 
 

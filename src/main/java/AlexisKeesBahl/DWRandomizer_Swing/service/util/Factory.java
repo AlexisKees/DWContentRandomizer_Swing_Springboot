@@ -1,6 +1,6 @@
-package dw.randomizer.service.util;
+package AlexisKeesBahl.DWRandomizer_Swing.service.util;
 
-import dw.randomizer.model.IPWClass;
+import AlexisKeesBahl.DWRandomizer_Swing.model.IPWClass;
 import org.springframework.stereotype.Component;
 
 @Component

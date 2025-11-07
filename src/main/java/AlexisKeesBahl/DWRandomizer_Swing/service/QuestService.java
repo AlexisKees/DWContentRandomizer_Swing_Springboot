@@ -1,19 +1,19 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.QuestArrays;
-import dw.randomizer.model.*;
-import dw.randomizer.presentation.ViewAll;
-import dw.randomizer.repository.QuestRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.data.QuestArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.*;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.QuestRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.PickFrom;
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class QuestService implements IGenericService<Quest>, IGenericCRUDService<Quest> {

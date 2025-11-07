@@ -1,9 +1,9 @@
-package dw.randomizer.presentation;
+package AlexisKeesBahl.DWRandomizer_Swing.presentation;
 
-import dw.randomizer.model.*;
-import dw.randomizer.service.*;
-import dw.randomizer.service.util.ClassIdentifier;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.model.*;
+import AlexisKeesBahl.DWRandomizer_Swing.service.*;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.ClassIdentifier;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

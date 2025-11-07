@@ -1,6 +1,6 @@
-package dw.randomizer.repository;
+package AlexisKeesBahl.DWRandomizer_Swing.repository;
 
-import dw.randomizer.model.AreaDiscovery;
+import AlexisKeesBahl.DWRandomizer_Swing.model.AreaDiscovery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

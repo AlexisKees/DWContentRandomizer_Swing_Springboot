@@ -1,18 +1,18 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.DetailsArrays;
-import dw.randomizer.data.DungeonArrays;
-import dw.randomizer.model.AreaDanger;
-import dw.randomizer.model.Creature;
-import dw.randomizer.repository.AreaDangerRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DungeonArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.AreaDanger;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Creature;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.AreaDangerRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.PickFrom;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
 
 @Service
 public class AreaDangerService implements IGenericService<AreaDanger>, IGenericCRUDService<AreaDanger> {

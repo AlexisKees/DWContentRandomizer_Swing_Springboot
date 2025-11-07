@@ -1,4 +1,4 @@
-package dw.randomizer.model;
+package AlexisKeesBahl.DWRandomizer_Swing.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

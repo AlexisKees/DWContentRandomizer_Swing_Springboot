@@ -1,8 +1,8 @@
-package dw.randomizer.service.util;
+package AlexisKeesBahl.DWRandomizer_Swing.service.util;
 
-import dw.randomizer.model.*;
-import dw.randomizer.service.*;
-import dw.randomizer.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.model.*;
+import AlexisKeesBahl.DWRandomizer_Swing.service.*;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

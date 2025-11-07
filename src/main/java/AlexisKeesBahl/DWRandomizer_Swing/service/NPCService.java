@@ -1,15 +1,15 @@
-package dw.randomizer.service;
+package AlexisKeesBahl.DWRandomizer_Swing.service;
 
-import dw.randomizer.data.CreatureArrays;
-import dw.randomizer.data.DetailsArrays;
-import dw.randomizer.data.NPCArrays;
-import dw.randomizer.data.NPCNamesArrays;
-import dw.randomizer.model.NPC;
-import dw.randomizer.model.util.Rolls;
-import dw.randomizer.presentation.ViewAll;
-import dw.randomizer.repository.NPCRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
-import dw.randomizer.service.util.SessionManager;
+import AlexisKeesBahl.DWRandomizer_Swing.data.CreatureArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.data.NPCArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.data.NPCNamesArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.NPC;
+import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
+import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
+import AlexisKeesBahl.DWRandomizer_Swing.repository.NPCRepository;
+import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static dw.randomizer.model.util.Rolls.PickFrom;
-import static dw.randomizer.service.GenericFunctions.printWithFlair;
+import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
+import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC> {
