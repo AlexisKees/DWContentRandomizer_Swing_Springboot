@@ -61,12 +61,16 @@ public class AreaService implements IGenericService<Area>, IGenericCRUDService<A
         area.setAreaType(PickFrom(DungeonArrays.AREA_TYPE));
         area.setOneLiner(area.getAreaType());
         rollAreaDetails(area);
+        area.setRarity(PickFrom(DungeonArrays.AREA_RARITY));
+
+
+
+        area.setAreaDressing(PickFrom(DungeonArrays.AREA_DRESSING));
+        if (Objects.equals(area.getAreaDressing(),"roll twice") || Objects.equals(area.getAreaDressing(),"ROLL TWICE")) area.setAreaDressing(rollTwice(DungeonArrays.AREA_DRESSING));
 
     }
 
     public void rollAreaDetails(Area area){
-        area.setRarity(PickFrom(DungeonArrays.AREA_RARITY));
-
         int rollRarity = UniversalRoll(DungeonArrays.AREA_RARITY);
         switch (rollRarity){
             case 0 ->{
@@ -109,9 +113,6 @@ public class AreaService implements IGenericService<Area>, IGenericCRUDService<A
         }
 
         area.setRarity(DungeonArrays.AREA_RARITY[rollRarity]);
-
-        area.setAreaDressing(PickFrom(DungeonArrays.AREA_DRESSING));
-        if (Objects.equals(area.getAreaDressing(),"roll twice") || Objects.equals(area.getAreaDressing(),"ROLL TWICE")) area.setAreaDressing(rollTwice(DungeonArrays.AREA_DRESSING));
 
         addDangers(area);
         addDiscoveries(area);

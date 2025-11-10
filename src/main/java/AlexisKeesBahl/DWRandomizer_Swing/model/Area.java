@@ -112,7 +112,7 @@ public class Area implements IPWClass {
                 int i;
                 for(i=0;i<this.getDiscoveriesAmount();i++){
                     str+= String.format("""
-                        \n%d) %S""",i+1,this.discoveries.get(i).getFinalResult());
+                        %d) %S\n\n""",i+1,this.discoveries.get(i).getFinalResult());
                 }
                 return str;
             }
@@ -131,7 +131,7 @@ public class Area implements IPWClass {
             int i;
             for(i=0;i<this.getDangersAmount();i++){
                 str+= String.format("""
-                        \n%d) %S""",i+1,this.dangers.get(i).getFinalResult());
+                        %d) %S\n\n""",i+1,this.dangers.get(i).getFinalResult());
             }
             return str;
         }

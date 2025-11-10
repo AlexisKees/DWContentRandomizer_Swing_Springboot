@@ -1,12 +1,14 @@
 package AlexisKeesBahl.DWRandomizer_Swing.service;
 
 import AlexisKeesBahl.DWRandomizer_Swing.model.IPWClass;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Service
 public class GenericFunctions {
 
     public static <T extends IPWClass> void exportPW(T pw) throws IOException {
