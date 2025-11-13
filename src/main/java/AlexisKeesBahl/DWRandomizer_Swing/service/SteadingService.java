@@ -54,16 +54,20 @@ public class SteadingService implements IGenericService<Steading>, IGenericCRUDS
 
     public void rollSteading(Steading steading){
         steading.setSize(PickFrom(SteadingArrays.SETTLEMENT_SIZE));
+        steading.setName(PickFrom(SteadingArrays.STEADING_NAMES));
+        steading.setRaceOfBuilders(creatureService.rollHumanoid());
         rollDetails(steading);
     }
 
     public void rollSteading(Steading steading, String size){
         steading.setSize(size);
+        steading.setName(PickFrom(SteadingArrays.STEADING_NAMES));
+        steading.setRaceOfBuilders(creatureService.rollHumanoid());
         rollDetails(steading);
     }
 
-    private void rollDetails(Steading steading){
-        steading.setName(PickFrom(SteadingArrays.STEADING_NAMES));
+    public void rollDetails(Steading steading){
+
         switch (steading.getSize()){
             case "VILLAGE" ->{
                 steading.setTags("Poor, steady, militia, resource (GM's choice)");
@@ -87,7 +91,7 @@ public class SteadingService implements IGenericService<Steading>, IGenericCRUDS
             }
         }
 
-        steading.setRaceOfBuilders(creatureService.rollHumanoid());
+
         steading.setAlignment(PickFrom(DetailsArrays.ALIGNMENT));
         steading.setDangerLevel(PickFrom(SteadingArrays.DANGER_LEVEL));
         steading.setOneLiner(steading.getName()+", "+steading.getRaceOfBuilders()+" "+steading.getSize().toLowerCase());

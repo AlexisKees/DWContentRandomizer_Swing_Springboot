@@ -89,6 +89,12 @@ public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC
         int ageRoll = (int)(Math.random()*7+3);
         npc.setAge(DetailsArrays.AGE[ageRoll]);
 
+        rollDetails(npc);
+
+    }
+
+    public void rollDetails(NPC npc) {
+
         npc.setCategory(PickFrom(NPCArrays.CATEGORY));
         switch (npc.getCategory()){
             case "Outsider" -> npc.setJobList(NPCArrays.OUTSIDER);
@@ -121,7 +127,7 @@ public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC
             npc.setQuirk(Rolls.rollTwice(NPCArrays.QUIRK));
         }
 
-        npc.setOneLiner(String.format("%s, the %s %s %s", npc.getName(), npc.getQuirk(),npc.getRace(), npc.getJob()));
+        npc.setOneLiner(String.format("%s, the %s %s", npc.getName(), npc.getRace(), npc.getJob()));
     }
 
     @Override
