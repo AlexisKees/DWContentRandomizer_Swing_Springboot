@@ -62,6 +62,60 @@ public class DangerService implements IGenericService<Danger>, IGenericCRUDServi
             case "CREATURE" -> danger.setSubcategoriesTable(DangerArrays.CREATURE_SUBCATEGORIES);
         }
 
+        rollSubcategory(danger);
+        rollPrompt(danger);
+    }
+
+    public void rollPrompt(Danger danger) {
+        danger.setPrompt(PickFrom(danger.getPromptTable()));
+
+        switch (danger.getPrompt()) {
+            case "lesser elemental" -> {
+                String element = creatureService.rollElement();
+                danger.setFinalResult("lesser "+element+" elemental");
+            }
+            case "elemental" ->{
+                String element = creatureService.rollElement();
+                danger.setFinalResult(element+" elemental");
+            }
+            case "greater elemental" -> {
+                String element = creatureService.rollElement();
+                danger.setFinalResult("greater "+element+" elemental");
+            }
+            case "elemental lord" -> {
+                String element = creatureService.rollElement();
+                danger.setFinalResult(element+" elemental lord");
+            }
+            case "magical: natural + MAGIC TYPE" -> {
+                String magicType = creatureService.rollMagicType();
+                danger.setFinalResult("Magical natural phenomenon: "+magicType);
+                danger.setOneLiner(danger.getFinalResult());
+            }
+            case "planar: natural + ELEMENT" -> {
+                String magicType = creatureService.rollMagicType();
+                danger.setFinalResult("Planar natural phenomenon: "+magicType);
+                danger.setOneLiner(danger.getFinalResult());
+            }
+            case "oddity-based" -> {
+                String oddity = creatureService.rollOddity();
+                danger.setFinalResult("Natural "+oddity.toLowerCase());
+                danger.setOneLiner(danger.getFinalResult());
+            }
+            case "Creature"->{
+                Creature c = new Creature();
+                creatureService.rollAttributes(c);
+                c.setDisposition(DetailsArrays.DISPOSITION[0]); //SET DISPOSITION TO "ATTACKING"
+                danger.setFinalResult(c.toString());
+                danger.setOneLiner(c.getOneLiner());
+            }
+            default -> {
+                danger.setFinalResult(danger.getPrompt());
+                danger.setOneLiner(danger.getFinalResult());
+            }
+        }
+    }
+
+    public void rollSubcategory(Danger danger) {
         danger.setSubcategory(PickFrom(danger.getSubcategoriesTable()));
 
         switch (danger.getSubcategory()){
@@ -72,54 +126,7 @@ public class DangerService implements IGenericService<Danger>, IGenericCRUDServi
             case "Natural" -> danger.setPromptTable(DangerArrays.NATURAL_PROMPTS);
             case "Creature" -> danger.setPromptTable(DangerArrays.CREATURE_SUBCATEGORIES);
         }
-
-        danger.setPrompt(PickFrom(danger.getPromptTable()));
-
-        switch (danger.getPrompt()) {
-        case "lesser elemental" -> {
-            String element = creatureService.rollElement();
-            danger.setFinalResult("lesser "+element+" elemental");
-        }
-        case "elemental" ->{
-            String element = creatureService.rollElement();
-            danger.setFinalResult(element+" elemental");
-        }
-        case "greater elemental" -> {
-            String element = creatureService.rollElement();
-            danger.setFinalResult("greater "+element+" elemental");
-        }
-        case "elemental lord" -> {
-            String element = creatureService.rollElement();
-            danger.setFinalResult(element+" elemental lord");
-        }
-        case "magical: natural + MAGIC TYPE" -> {
-            String magicType = creatureService.rollMagicType();
-            danger.setFinalResult("Magical natural phenomenon: "+magicType);
-            danger.setOneLiner(danger.getFinalResult());
-        }
-        case "planar: natural + ELEMENT" -> {
-            String magicType = creatureService.rollMagicType();
-            danger.setFinalResult("Planar natural phenomenon: "+magicType);
-            danger.setOneLiner(danger.getFinalResult());
-        }
-        case "oddity-based" -> {
-            String oddity = creatureService.rollOddity();
-            danger.setFinalResult("Natural "+oddity.toLowerCase());
-            danger.setOneLiner(danger.getFinalResult());
-        }
-        case "Creature"->{
-            Creature c = new Creature();
-            creatureService.rollAttributes(c);
-            c.setDisposition(DetailsArrays.DISPOSITION[0]); //SET DISPOSITION TO "ATTACKING"
-            danger.setFinalResult(c.toString());
-            danger.setOneLiner(c.getOneLiner());
-        }
-            default -> {
-                danger.setFinalResult(danger.getPrompt());
-                danger.setOneLiner(danger.getFinalResult());
-            }
-        }
-
+        rollPrompt(danger);
 
     }
 

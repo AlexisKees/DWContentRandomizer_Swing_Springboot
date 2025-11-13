@@ -69,9 +69,11 @@ public class DiscoveryService implements IGenericService<Discovery>, IGenericCRU
              }
              case "STRUCTURE" -> discovery.setSubcategoriesTable(DiscoveryArrays.STRUCTURE_SUBCATEGORIES);
         }
+        rollSubcategory(discovery);
+        rollPrompt(discovery);
+    }
 
-
-
+    public void rollSubcategory(Discovery discovery) {
         discovery.setSubcategory(PickFrom(discovery.getSubcategoriesTable()));
 
         switch (discovery.getSubcategory()){
@@ -98,6 +100,10 @@ public class DiscoveryService implements IGenericService<Discovery>, IGenericCRU
             case "Steading" -> discovery.setPromptTable(DiscoveryArrays.STEADING_PROMPTS);
         }
 
+        rollPrompt(discovery);
+    }
+
+    public void rollPrompt(Discovery discovery) {
         discovery.setPrompt(PickFrom(discovery.getPromptTable()));
 
         switch (discovery.getPrompt()){
@@ -216,8 +222,6 @@ public class DiscoveryService implements IGenericService<Discovery>, IGenericCRU
             }
 
         }
-
-
     }
 
     private void rollRuins(Discovery discovery){

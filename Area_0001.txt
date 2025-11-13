@@ -1,0 +1,6 @@
+Area: Kitchen
+Dressing: ornamentation
+Rarity: common
+Discoveries: 
+1) ALCOVES
+Dangers: no dangers.

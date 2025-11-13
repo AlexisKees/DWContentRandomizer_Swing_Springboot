@@ -1,0 +1,13 @@
+*** HOME OF THE LOW WATER ***
+
+Size: megadungeon
+Rooms: 51
+Theme amount: 10
+Themes: loss, madness, healing, corruption, savagery, death, fire, divine influence, light and torture
+Form: catacombs
+Exits: 1
+Situation: belowground
+Accessibility: clear/obvious
+Builder: humanoid society
+Function: intensification
+Cause of ruin: hubris

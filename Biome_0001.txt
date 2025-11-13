@@ -1,0 +1,8 @@
+Biome: Sea
+Weather: Rain
+Weather Intensity: Mild
+Wildlife: Overrun by dangerous beasts
+Population: Overpopulated
+Roads: Many roads, well preserved
+Alignment: neutral
+Distance: Requires three nights of camping

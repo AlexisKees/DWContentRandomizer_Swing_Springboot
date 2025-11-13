@@ -1,0 +1,7 @@
+Area: Exit
+Dressing: ornamentation
+Rarity: common
+Discoveries: no discoveries
+Dangers: 1) CRUSHING TRAP.
+
+

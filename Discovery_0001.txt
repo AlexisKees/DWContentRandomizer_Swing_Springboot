@@ -1,0 +1,9 @@
+DISCOVERY: STRUCTURE -> Ruin -> STEADING
+Steading in ruins:
+VIIMEINEN KOTI (LAST HOME), FIRBLOG VILLAGE
+
+Alignment: neutral
+Danger level: Safe
+Tags: Poor, steady, militia, resource (GM's choice)
+Feature: Natural defenses: safe, +defenses
+Problem: Recently at war: -population, -prosperity if fought to the end, -defenses if lost

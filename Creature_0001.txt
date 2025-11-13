@@ -1,0 +1,10 @@
+Creature category: Monster
+Creature subcategory: Undead
+Creature prompt: Skeleton
+Group size: solitary (1)
+Individual size: Huge
+20HP (2 armor: Mail or scales)
+1d10+3 damage (Reach, bludgeoning)
+Tags: magical
+Alignment: evil
+Disposition: cautious

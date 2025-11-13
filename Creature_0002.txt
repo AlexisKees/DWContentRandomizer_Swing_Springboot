@@ -1,0 +1,10 @@
+Creature category: Monster
+Creature subcategory: Undead
+Creature prompt: Skeleton
+Group size: group (1d6+2 per wave)
+Individual size: Medium-sized
+6HP (1 armor: Leathers or thick hides)
+1d8 damage (close, bludgeoning)
+Tags: intelligent
+Alignment: lawful
+Disposition: cautious

@@ -1,0 +1,8 @@
+Biome: Plains
+Weather: Insects
+Weather Intensity: Irrelevant
+Wildlife: Almost no wildlife
+Population: Scarce
+Roads: Many roads, well preserved
+Alignment: lawful
+Distance: Requires two nights of camping
