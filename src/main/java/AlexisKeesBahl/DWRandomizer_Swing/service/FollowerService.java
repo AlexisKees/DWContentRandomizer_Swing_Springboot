@@ -86,7 +86,7 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
         int ageRoll = (int)(Math.random()*7+3);
         follower.setAge(DetailsArrays.AGE[ageRoll]);
         follower.setOneLiner(follower.getName()+", "+follower.getGender()+" "+follower.getRace());
-
+        System.out.println("Follower roll OK");
         rollFollowerDetails(follower);
     }
 
@@ -153,6 +153,7 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
             follower.setArmor(follower.getArmor()+1);
             follower.setArmorType(follower.getArmorType()+" and a shield");
         }
+        System.out.println("Follower details OK");
 
     }
 

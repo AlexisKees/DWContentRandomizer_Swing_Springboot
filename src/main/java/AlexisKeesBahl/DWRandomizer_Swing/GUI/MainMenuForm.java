@@ -95,12 +95,11 @@ public class MainMenuForm extends JFrame{
             dispose();
         });
         followerButton.addActionListener(e -> {
-            /*
+
             FollowerMenuForm followerMenuForm = context.getBean(FollowerMenuForm.class);
             followerMenuForm.setVisible(true);
             dispose();
 
-             */
         });
         NPCButton.addActionListener(e -> {
             NPCMenuForm npcMenuForm = context.getBean(NPCMenuForm.class);
