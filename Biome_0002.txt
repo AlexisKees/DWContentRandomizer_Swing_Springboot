@@ -1,8 +1,0 @@
-Biome: null
-Weather: null
-Weather Intensity: null
-Wildlife: null
-Population: null
-Roads: null
-Alignment: null
-Distance: null

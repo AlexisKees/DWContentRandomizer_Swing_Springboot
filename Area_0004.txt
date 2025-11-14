@@ -1,7 +1,0 @@
-Area: Vault
-Dressing: fungus
-Rarity: common
-Discoveries: no discoveries
-Dangers: 1) ENSNARING TRAP.
-
-
