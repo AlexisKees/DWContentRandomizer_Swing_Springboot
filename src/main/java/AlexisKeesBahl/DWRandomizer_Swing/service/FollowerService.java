@@ -6,26 +6,19 @@ import AlexisKeesBahl.DWRandomizer_Swing.data.NPCArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.NPCNamesArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Follower;
 import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.FollowerRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class FollowerService implements IGenericService<Follower>, IGenericCRUDService<Follower> {
 
-    @Autowired
-    private SessionManager sessionManager;
-    @Autowired
-    private ViewAll viewAll;
+
     @Autowired
     FollowerRepository followerRepository;
 
@@ -212,77 +205,4 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
 
     }
 
-    @Override
-    public String showOptions(Scanner dataInput, Class<Follower> parameterClass) {
-        Follower follower;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            follower = new Follower();
-        } else {
-            follower = sessionManager.getSelected(parameterClass);
-        }
-        int option;
-        System.out.println("WELCOME TO THE FOLLOWER GENERATOR\n");
-        String menu = "MAIN_MENU";
-        try{
-
-            do {
-                System.out.print("""
-                        \nPlease select an option:
-                        1) Create new random follower
-                        2) View current follower
-                        3) Reroll this follower
-                        4) View list of generated follower
-                        5) Export current follower
-                        6) MANAGE DB
-                        0) Main menu
-                        
-                        \tOption:\s""");
-
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option){
-                    case 1 -> {
-                        rollFollower(follower);
-                        sessionManager.add(Follower.class,follower.clone());
-                        printWithFlair(follower);
-                    }
-                    case 2 ->{
-                        if (follower.getRace()==null){
-                            rollFollower(follower);
-                            sessionManager.add(Follower.class,follower.clone());
-                        }
-                        printWithFlair(follower);
-                    }
-                    case 3 ->{
-                        if (follower.getRace()==null){
-                            rollFollower(follower);
-                        } else {
-                            rollFollowerDetails(follower);
-                        }
-                        sessionManager.add(Follower.class,follower.clone());
-                        printWithFlair(follower);
-                    }
-                    case 4 -> follower = viewAll.run(dataInput, Follower.class);
-                    case 5 -> {
-                        if (follower.getRace()==null){
-                            rollFollower(follower);
-                            sessionManager.add(Follower.class,follower.clone());
-                        }
-                        GenericFunctions.exportPW(follower);
-                    }
-                    case 6 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-                }
-            } while (option!=0);
-
-
-        }catch (Exception e){
-            System.out.println("\nPlease choose a valid option.\n");
-        }
-        return menu;
-    }
 }

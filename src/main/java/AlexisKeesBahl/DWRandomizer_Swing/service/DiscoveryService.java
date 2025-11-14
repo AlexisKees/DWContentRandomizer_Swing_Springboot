@@ -4,26 +4,18 @@ import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.DiscoveryArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.*;
 import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.DiscoveryRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class DiscoveryService implements IGenericService<Discovery>, IGenericCRUDService<Discovery> {
 
-    @Autowired
-    private SessionManager sessionManager;
-    @Autowired
-    private ViewAll viewAll;
     @Autowired
     private DungeonService dungeonService;
     @Autowired
@@ -262,69 +254,4 @@ public class DiscoveryService implements IGenericService<Discovery>, IGenericCRU
             default -> {}
         }
     }
-
-    @Override
-    public String showOptions(Scanner dataInput, Class<Discovery> parameterClass) {
-        Discovery discovery;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            discovery = new Discovery();
-        } else {
-            discovery = sessionManager.getSelected(parameterClass);
-        }
-        int option;
-        System.out.println("WELCOME TO THE DISCOVERY GENERATOR\n");
-        String menu = "MAIN_MENU";
-        try{
-            do {
-                System.out.print("""
-                        Please select an option:
-                        1) Create new random discovery
-                        2) View current discovery
-                        3) View list of generated discoveries
-                        4) Export current
-                        5) MANAGE DB
-                        0) Main menu
-                        
-                        \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option){
-                    case 1 ->{
-                        rollDiscovery(discovery);
-                        sessionManager.add(Discovery.class,discovery.clone());
-                        printWithFlair(discovery);
-                    }
-                    case 2 -> {
-                        if(discovery.getCategory()==null){
-                            rollDiscovery(discovery);
-                            sessionManager.add(Discovery.class,discovery.clone());
-                        }
-                        printWithFlair(discovery);
-                        System.out.println("\n");
-                    }
-                    case 3 -> discovery = viewAll.run(dataInput,Discovery.class);
-                    case 4 -> {
-                        if(discovery.getCategory()==null){
-                            rollDiscovery(discovery);
-                            sessionManager.add(Discovery.class,discovery.clone());
-                        }
-                        GenericFunctions.exportPW(discovery);
-                    }
-                    case 5 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-
-                }
-            }while (option !=0);
-        }catch (Exception e){
-            System.out.println("\nPlease choose a valid option.\n");
-        }
-        return menu;
-    }
-
-
-
 }

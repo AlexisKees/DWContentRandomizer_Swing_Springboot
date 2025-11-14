@@ -2,27 +2,16 @@ package AlexisKeesBahl.DWRandomizer_Swing.service;
 
 import AlexisKeesBahl.DWRandomizer_Swing.data.QuestArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.*;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.QuestRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
-
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class QuestService implements IGenericService<Quest>, IGenericCRUDService<Quest> {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ViewAll viewAll;
 
     @Autowired
     private DungeonService dungeonService;
@@ -80,98 +69,4 @@ public class QuestService implements IGenericService<Quest>, IGenericCRUDService
     }
 
 
-
-    public String showOptions(Scanner dataInput, Class<Quest> parameterClass) {
-        Quest quest;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            quest = new Quest();
-        } else {
-            quest = sessionManager.getSelected(parameterClass);
-        }
-
-        var option = 0;
-        String menu = "MAIN_MENU";
-        System.out.println("WELCOME TO THE QUEST GENERATOR\n");
-
-        do {
-            try {
-                System.out.print("""
-                        \nPlease select an option:
-                        1) Create new random quest
-                        2) Quest giver details
-                        3) Quest location details
-                        4) See current quest
-                        5) See previously generated quests
-                        6) Print quest
-                        7) MANAGE DB
-                        0) Main menu
-                        
-                        \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option) {
-                    case 1 -> {
-                        rollQuest(quest);
-                        sessionManager.add(Quest.class,quest);
-                        sessionManager.add(NPC.class, quest.getQuestGiver());
-                        sessionManager.add(Dungeon.class,quest.getDungeon());
-                        sessionManager.add(Biome.class,quest.getBiome());
-                        printWithFlair(quest.getBrief());
-                    }
-                    case 2 -> {
-                        if(quest.getTask()==null){
-                            rollQuest(quest);
-                            sessionManager.add(Quest.class,quest);
-                            sessionManager.add(NPC.class, quest.getQuestGiver());
-                            sessionManager.add(Dungeon.class,quest.getDungeon());
-                            sessionManager.add(Biome.class,quest.getBiome());
-                        }
-                        printWithFlair("QUEST GIVER:\n\n"+quest.getQuestGiver());
-                    }
-                    case 3 -> {
-                        if(quest.getTask()==null){
-                            rollQuest(quest);
-                            sessionManager.add(Quest.class,quest);
-                            sessionManager.add(NPC.class, quest.getQuestGiver());
-                            sessionManager.add(Dungeon.class,quest.getDungeon());
-                            sessionManager.add(Biome.class,quest.getBiome());
-                        }
-                        printWithFlair("QUEST LOCATION - BIOME:\n\n"+quest.getBiome()+"\n\n"+"QUEST LOCATION - DUNGEON:\n\n"+quest.getDungeon());
-                    }
-                    case 4 -> {
-                        if(quest.getTask()==null){
-                            rollQuest(quest);
-                            sessionManager.add(Quest.class,quest);
-                            sessionManager.add(NPC.class, quest.getQuestGiver());
-                            sessionManager.add(Dungeon.class,quest.getDungeon());
-                            sessionManager.add(Biome.class,quest.getBiome());
-                        }
-                        printWithFlair(quest);
-                    }
-                    case 5-> quest = viewAll.run(dataInput,Quest.class);
-                    case 6 -> {
-                        if(quest.getTask() == null) {
-                            rollQuest(quest);
-                            sessionManager.add(Quest.class,quest);
-                            sessionManager.add(NPC.class, quest.getQuestGiver());
-                            sessionManager.add(Dungeon.class,quest.getDungeon());
-                            sessionManager.add(Biome.class,quest.getBiome());
-                        }
-                        GenericFunctions.exportPW(quest);
-                    }
-                    case 7 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-                    default -> System.out.print("\nInvalid number!\n\n");
-                }
-            } catch (Exception e) {
-                System.out.println("\nPlease choose a valid option.\n");
-            }
-        }
-        while (option != 0);
-        return menu;
-    }
 }

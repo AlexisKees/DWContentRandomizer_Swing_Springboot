@@ -6,27 +6,18 @@ import AlexisKeesBahl.DWRandomizer_Swing.data.NPCArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.NPCNamesArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.NPC;
 import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.NPCRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC> {
-
-    @Autowired
-    private SessionManager sessionManager;
-    @Autowired
-    private ViewAll viewAll;
 
     @Autowired
     NPCRepository npcRepository;
@@ -130,61 +121,5 @@ public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC
         npc.setOneLiner(String.format("%s, the %s %s", npc.getName(), npc.getRace(), npc.getJob()));
     }
 
-    @Override
-    public String showOptions(Scanner dataInput, Class<NPC> parameterClass) {
-        NPC npc;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            npc = new NPC();
-        } else {
-            npc = sessionManager.getSelected(parameterClass);
-        }
 
-        var option = 0;
-        System.out.println("\nWELCOME TO THE NPC GENERATOR\n");
-        String menu = "MAIN_MENU";
-        do {
-            try {
-                System.out.print("""
-                        Please select an option:
-                        1) Create new random NPC
-                        2) View current
-                        3) View list of generated NPCs
-                        4) Export current
-                        5) MANAGE DB
-                        0) Main menu
-                        
-                        Option:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option) {
-                    case 1 -> {
-                        rollNPC(npc);
-                        printWithFlair(npc);
-                        sessionManager.add(NPC.class,npc.clone());
-                    }
-                    case 2 -> {
-                        if (npc.getRace()==null) {
-                            rollNPC(npc);
-                            sessionManager.add(NPC.class,npc.clone());
-                        }
-                        printWithFlair(npc);
-                    }
-                    case 3 -> npc = viewAll.run(dataInput,NPC.class);
-                    case 4 -> GenericFunctions.exportPW(npc);
-                    case 5 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-                    default -> System.out.print("\nInvalid number!\n\n");
-                }
-            } catch (Exception e) {
-                System.out.println("\nPlease choose a valid option.\n");
-            }
-        }
-        while (option != 0);
-
-        return menu;
-    }
 }

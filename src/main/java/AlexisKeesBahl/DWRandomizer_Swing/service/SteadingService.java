@@ -3,26 +3,19 @@ package AlexisKeesBahl.DWRandomizer_Swing.service;
 import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.SteadingArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Steading;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.SteadingRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class SteadingService implements IGenericService<Steading>, IGenericCRUDService<Steading> {
 
-    @Autowired
-    private SessionManager sessionManager;
-    @Autowired
-    private ViewAll viewAll;
+
     @Autowired
     CreatureService creatureService;
 
@@ -97,65 +90,4 @@ public class SteadingService implements IGenericService<Steading>, IGenericCRUDS
         steading.setOneLiner(steading.getName()+", "+steading.getRaceOfBuilders()+" "+steading.getSize().toLowerCase());
     }
 
-    @Override
-    public String showOptions(Scanner dataInput, Class<Steading> parameterClass) {
-        Steading steading;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            steading = new Steading();
-        } else {
-            steading = sessionManager.getSelected(parameterClass);
-        }
-        int option;
-        System.out.println("WELCOME TO THE STEADING GENERATOR\n");
-        String menu = "MAIN_MENU";
-        try {
-            do {
-                System.out.print("""
-                        Please select an option:
-                        1) Create new random steading
-                        2) View current
-                        3) View list of generated steadings
-                        4) Export current
-                        5) MANAGE DB
-                        0) Main menu
-                        
-                        \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option) {
-                    case 1 -> {
-                        rollSteading(steading);
-                        sessionManager.add(Steading.class,steading);
-                        printWithFlair(steading);
-                    }
-                    case 2 -> {
-                        if(steading.getSize() == null) {
-                            rollSteading(steading);
-                            sessionManager.add(Steading.class,steading);
-                        }
-                        printWithFlair(steading);
-                    }
-                    case 3 -> steading = viewAll.run(dataInput, Steading.class);
-                    case 4 -> {
-                        if(steading.getSize() == null) {
-                            rollSteading(steading);
-                            sessionManager.add(Steading.class,steading);
-                        }
-                        GenericFunctions.exportPW(steading);
-                    }
-                    case 5-> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-
-                }
-
-            } while (option != 0);
-        } catch (Exception e) {
-            System.out.println("\nPlease choose a valid option.\n");
-        }
-        return menu;
-    }
 }

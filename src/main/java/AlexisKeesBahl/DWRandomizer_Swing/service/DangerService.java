@@ -3,27 +3,18 @@ package AlexisKeesBahl.DWRandomizer_Swing.service;
 import AlexisKeesBahl.DWRandomizer_Swing.data.DangerArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.*;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.DangerRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class DangerService implements IGenericService<Danger>, IGenericCRUDService<Danger> {
 
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ViewAll viewAll;
 
     @Autowired
     private CreatureService creatureService;
@@ -130,64 +121,4 @@ public class DangerService implements IGenericService<Danger>, IGenericCRUDServi
 
     }
 
-    @Override
-    public String showOptions(Scanner dataInput, Class<Danger> parameterClass) {
-        Danger danger;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            danger = new Danger();
-        } else {
-            danger = sessionManager.getSelected(parameterClass);
-        }
-        int option;
-        System.out.println("WELCOME TO THE DANGER GENERATOR\n");
-        String menu = "MAIN_MENU";
-        try{
-            do {
-                System.out.print("""
-                            Please select an option:
-                            1) Create new random danger
-                            2) View current danger
-                            3) View list of generated dangers
-                            4) Export current
-                            5) MANAGE DB
-                            0) Main menu
-                            
-                            \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option){
-                    case 1 ->{
-                        rollDanger(danger);
-                        sessionManager.add(Danger.class,danger.clone());
-                        printWithFlair(danger);
-                    }
-                    case 2 -> {
-                        if (danger.getCategory() == null){
-                            rollDanger(danger);
-                        }
-                        sessionManager.add(Danger.class,danger.clone());
-                        printWithFlair(danger);
-                    }
-                    case 3 -> danger = viewAll.run(dataInput,Danger.class);
-                    case 4 -> {
-                        if (danger.getCategory() == null){
-                            rollDanger(danger);
-                            sessionManager.add(Danger.class,danger.clone());
-                        }
-                        GenericFunctions.exportPW(danger);
-                    }
-                    case 5-> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-
-                }
-            }while (option !=0);
-        }catch (Exception e){
-            System.out.println("\nPlease choose a valid option.\n");
-        }
-        return menu;
-    }
 }

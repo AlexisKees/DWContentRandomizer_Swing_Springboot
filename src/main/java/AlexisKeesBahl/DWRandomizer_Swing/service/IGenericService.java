@@ -4,6 +4,4 @@ import AlexisKeesBahl.DWRandomizer_Swing.model.*;
 
 import java.util.Scanner;
 
-public interface IGenericService<T extends IPWClass>  {
-    String showOptions(Scanner dataInput,Class<T> parameterClass);
-}
+public interface IGenericService<T extends IPWClass>  {}

@@ -1,9 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.DBMenu;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.SubMenu;
 import AlexisKeesBahl.DWRandomizer_Swing.service.*;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.ClassIdentifier;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,37 +28,11 @@ public class MainMenuForm extends JFrame{
     private JButton quitButton;
     private JButton creditsButton;
 
-    DBMenu dbMenu;
-    AreaService areaService;
-    BiomeService biomeService;
-    CreatureService creatureService;
-    DangerService dangerService;
-    DiscoveryService discoveryService;
-    DungeonService dungeonService;
-    FollowerService followerService;
-    NPCService npcService;
-    QuestService questService;
-    SteadingService steadingService;
-    ClassIdentifier classIdentifier;
-    SessionManager sessionManager;
-    SubMenu subMenu;
 
     @Autowired
     public MainMenuForm(ApplicationContext context){
-        this.dbMenu=dbMenu;
-        this.areaService = areaService;
-        this.biomeService = biomeService;
-        this.creatureService = creatureService;
-        this.dangerService = dangerService;
-        this.discoveryService = discoveryService;
-        this.dungeonService = dungeonService;
-        this.followerService = followerService;
-        this.npcService = npcService;
-        this.questService = questService;
-        this.steadingService = steadingService;
-        this.classIdentifier=classIdentifier;
-        this.sessionManager =sessionManager;
-        this.subMenu=subMenu;
+
+
 
         initializeForm();
 

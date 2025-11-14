@@ -3,28 +3,18 @@ package AlexisKeesBahl.DWRandomizer_Swing.service;
 import AlexisKeesBahl.DWRandomizer_Swing.data.CreatureArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Creature;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.CreatureRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.*;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class CreatureService implements IGenericService<Creature>, IGenericCRUDService<Creature> {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ViewAll viewAll;
 
     @Autowired
     CreatureRepository creatureRepository;
@@ -356,97 +346,5 @@ public class CreatureService implements IGenericService<Creature>, IGenericCRUDS
         creature.setDisposition(PickFrom(DetailsArrays.DISPOSITION));
     }
 
-    @Override
-    public String showOptions(Scanner dataInput, Class<Creature> parameterClass) {
-        Creature creature;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            creature = new Creature();
-        } else {
-            creature = sessionManager.getSelected(parameterClass);
-        }
-        String menu = "MAIN_MENU";
-        var option = 0;
 
-        System.out.println("WELCOME TO THE CREATURE GENERATOR");
-
-        do {
-            try {
-                System.out.print("""
-                        Please select an option:
-                        1) Create new random creature
-                        2) Reroll Subcategory
-                        3) Reroll Prompt
-                        4) Reroll Stats
-                        5) View current creature
-                        6) View generated creature list
-                        7) Export creature
-                        8) MANAGE DB
-                        0) Main menu
-                        
-                        \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option) {
-                    case 1 -> {
-                        rollAttributes(creature);
-                        sessionManager.add(parameterClass,creature.clone());
-                        printWithFlair(creature);
-                    }
-                    case 2 -> {
-                        if (creature.getCategory()== null) {
-                            rollAttributes(creature);
-                            sessionManager.add(parameterClass,creature.clone());
-                        } else {
-                            reRollSubcategory(creature);
-                            sessionManager.add(parameterClass,creature.clone());
-                        }
-                        printWithFlair(creature);
-                    }
-                    case 3 -> {
-                        if (creature.getCategory() == null) {
-                            rollAttributes(creature);
-                        } else {
-                            reRollPrompt(creature);
-                        }
-                        sessionManager.add(parameterClass,creature.clone());
-                        printWithFlair(creature);
-                    }
-                    case 4 -> {
-                        if (creature.getCategory() == null) {
-                            rollAttributes(creature);
-                        } else {
-                            rollStats(creature);
-                        }
-                        sessionManager.add(parameterClass,creature.clone());
-                        printWithFlair(creature);
-                    }
-                    case 5 -> {
-                        if (creature.getCategory() == null) {
-                            rollAttributes(creature);
-                            sessionManager.add(parameterClass,creature.clone());
-                        }
-                        printWithFlair(creature);
-                    }
-                    case 6 -> creature = viewAll.run(dataInput,parameterClass);
-                    case 7 -> {
-                        if (creature.getCategory() == null) {
-                            rollAttributes(creature);
-                            sessionManager.add(parameterClass,creature.clone());
-                        }
-                        GenericFunctions.exportPW(creature);
-                    }
-                    case 8 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-                    default -> System.out.print("\nInvalid number!\n\n");
-                }
-            } catch (Exception e) {
-                System.out.println("\nPlease choose a valid option. Error: \n"+e.getMessage());
-            }
-        } while (option != 0);
-        return menu;
-    }
 }

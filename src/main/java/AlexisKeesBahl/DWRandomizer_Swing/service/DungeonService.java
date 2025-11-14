@@ -5,10 +5,8 @@ import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Dungeon;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Steading;
 import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.DungeonRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Slf4j
 @Service
 public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDService<Dungeon> {
-    @Autowired
-    private SessionManager sessionManager;
-    @Autowired
-    private ViewAll viewAll;
-    @Autowired
-    private DungeonAreaService dungeonAreaService;
+
 
     @Autowired
     private CreatureService creatureService;
@@ -150,69 +141,5 @@ public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDSer
 
         dungeon.setOneLiner(dungeon.getName());
 
-    }
-
-    public String showOptions(Scanner dataInput, Class<Dungeon> parameterClass) {
-        Dungeon dungeon;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            dungeon = new Dungeon();
-        } else {
-            dungeon = sessionManager.getSelected(parameterClass);
-        }
-
-        int option = 0;
-        System.out.println("WELCOME TO THE DUNGEON GENERATOR\n");
-        String menu = "MAIN_MENU";
-        do {
-            try {
-                System.out.print("""
-                        Please select an option:
-                        1) Create new random dungeon
-                        2) Add areas
-                        3) View generated dungeons list
-                        4) View current dungeon
-                        5) Export dungeon
-                        6) MANAGE DB
-                        0) Main menu
-                      
-                        \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option) {
-                    case 1 -> {
-                        rollDungeon(dungeon);
-                        sessionManager.add(Dungeon.class,dungeon.clone());
-                        printWithFlair(dungeon);
-                    }
-                    case 2 -> dungeonAreaService.showOptions(dataInput);
-                    case 3 -> dungeon = viewAll.run(dataInput,Dungeon.class);
-                    case 4 -> {
-                        if (dungeon.getName()==null){
-                            System.out.println("\nGenerating dungeon...\n");
-                            dungeon = new Dungeon();
-                            sessionManager.add(Dungeon.class,dungeon.clone());
-                        }
-                        printWithFlair(dungeon);
-                    }
-                    case 5 -> {
-                        if (dungeon.getName() == null) {
-                            dungeon = new Dungeon();
-                            sessionManager.add(Dungeon.class,dungeon.clone());
-                        }
-                        GenericFunctions.exportPW(dungeon);
-                    }
-                    case 6 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-                    default -> System.out.print("\nInvalid number!\n\n");
-                }
-            } catch (Exception e) {
-                log.error("Please choose a valid option. Error: {}", e.getMessage(), e);
-            }
-        } while (option != 0);
-        return menu;
     }
 }

@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
-
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.*;
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
 
@@ -72,10 +70,5 @@ public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IGe
 
         discovery.setOneLiner(discovery.getFinalResult());
 
-    }
-
-    @Override
-    public String showOptions(Scanner dataInput, Class<AreaDiscovery> parameterClass) {
-        return "";
     }
 }

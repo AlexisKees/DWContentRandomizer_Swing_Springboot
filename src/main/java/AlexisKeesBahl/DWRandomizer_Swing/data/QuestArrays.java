@@ -15,9 +15,15 @@ public class QuestArrays {
 
     public static final String[] RELEVANCE ={
             "Personal",
+            "Personal",
+            "Personal",
+            "Personal",
+            "Familiar",
             "Familiar",
             "Social",
+            "Social",
             "Political",
+            "Economical",
             "Economical",
             "Diplomatic",
             "Military",
@@ -25,14 +31,22 @@ public class QuestArrays {
     };
 
     public static final String[] REWARD = {
-            "Cost of living",
+            "Monetary reward",
+            "Monetary reward",
+            "Monetary reward",
+            "Monetary reward",
+            "Weaponry and/or armor",
+            "Weaponry and/or armor",
+            "Local renown and cash",
             "Local renown and cash",
             "Political favor",
+            "Political favor",
+            "Big monetary reward",
             "Big monetary reward",
             "Free pass through disputed lands",
-            "Weaponry and/or armor",
             "Magic items"
     };
 
 
 }
+

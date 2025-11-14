@@ -4,28 +4,19 @@ import AlexisKeesBahl.DWRandomizer_Swing.data.DungeonArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.AreaDanger;
 import AlexisKeesBahl.DWRandomizer_Swing.model.AreaDiscovery;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.AreaRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
-import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.*;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class AreaService implements IGenericService<Area>, IGenericCRUDService<Area> {
-
-    @Autowired
-    private SessionManager sessionManager;
-    @Autowired
-    private ViewAll viewAll;
 
     @Autowired
     private AreaDangerService areaDangerService;
@@ -148,79 +139,5 @@ public class AreaService implements IGenericService<Area>, IGenericCRUDService<A
         area.setDangers(list);
     }
 
-    @Override
-    public String showOptions(Scanner dataInput, Class<Area> parameterClass) {
-        Area area;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            area = new Area();
-        } else {
-            area = sessionManager.getSelected(parameterClass);
-        }
 
-        int option;
-        System.out.println("WELCOME TO THE AREA GENERATOR\n");
-        String menu = "MAIN_MENU";
-        try{
-            do {
-                System.out.print("""
-                        \nPlease select an option:
-                        1) Create new random area
-                        2) View current area
-                        3) Reroll this area
-                        4) View list of generated area
-                        5) Export current area
-                        6) MANAGE DB
-                        0) Main menu
-                        
-                        \tOption:\s""");
-
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option){
-                    case 1 -> {
-                        rollArea(area);
-                        sessionManager.add(Area.class,area.clone());
-                        printWithFlair(sessionManager.getSelected(Area.class));
-                    }
-                    case 2 ->{
-                        if (area.getAreaType()==null){
-                            sessionManager.add(Area.class,area.clone());
-                            rollArea(area);
-                        }
-                        printWithFlair(area);
-                    }
-                    case 3 ->{
-                        if (area.getAreaType()==null){
-                            rollArea(area);
-                            sessionManager.add(Area.class,area.clone());
-                        } else {
-                            rollAreaDetails(area);
-                            sessionManager.add(Area.class,area.clone());
-                        }
-                        printWithFlair(area);
-                    }
-                    case 4 -> area = viewAll.run(dataInput, Area.class);
-                    case 5 -> {
-                        if (area.getAreaType()==null){
-                            rollArea(area);
-                            sessionManager.add(Area.class,area);
-                        }
-                        GenericFunctions.exportPW(area);
-                    }
-                    case 6 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-                }
-            } while (option!=0);
-
-
-        }catch (Exception e){
-            System.out.println("\nPlease choose a valid option.\n");
-        }
-
-        return menu;
-    }
 }

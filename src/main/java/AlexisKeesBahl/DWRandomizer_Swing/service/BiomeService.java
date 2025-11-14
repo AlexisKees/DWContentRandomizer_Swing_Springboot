@@ -3,7 +3,6 @@ package AlexisKeesBahl.DWRandomizer_Swing.service;
 import AlexisKeesBahl.DWRandomizer_Swing.data.BiomeArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.data.DetailsArrays;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Biome;
-import AlexisKeesBahl.DWRandomizer_Swing.presentation.ViewAll;
 import AlexisKeesBahl.DWRandomizer_Swing.repository.BiomeRepository;
 import AlexisKeesBahl.DWRandomizer_Swing.service.crud.IGenericCRUDService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
@@ -11,16 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
-
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.*;
-import static AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions.printWithFlair;
 
 @Service
 public class BiomeService implements IGenericService<Biome>, IGenericCRUDService<Biome> {
-
-    @Autowired
-    private ViewAll viewAll;
 
     @Autowired
     private SessionManager sessionManager;
@@ -65,78 +58,6 @@ public class BiomeService implements IGenericService<Biome>, IGenericCRUDService
         biome.setDistance(PickFrom(BiomeArrays.DISTANCE));
         biome.setOneLiner(String.format("%s %s",biome.getPopulation(),biome.getBiome()));
 
-    }
-
-    @Override
-    public String showOptions(Scanner dataInput, Class<Biome> parameterClass) {
-        Biome biome;
-        if(sessionManager.getSelected(parameterClass)==null) {
-            biome = new Biome();
-        } else {
-            biome = sessionManager.getSelected(parameterClass);
-        }
-        int option;
-        System.out.println("WELCOME TO THE BIOME GENERATOR\n");
-        String menu = "MAIN_MENU";
-        try{
-            do {
-                System.out.print("""
-                        \nPlease select an option:
-                        1) Create new random Biome
-                        2) View current
-                        3) Reroll this biome
-                        4) View list of generated biomes
-                        5) Export current biome
-                        6) MANAGE DATABASE
-                        0) Main menu
-                        
-                        \tOption:\s""");
-                option = Integer.parseInt(dataInput.nextLine());
-                System.out.println();
-
-                switch (option){
-                    case 1 ->{
-                        rollBiome(biome);
-                        sessionManager.add(Biome.class,biome.clone());
-                        printWithFlair(sessionManager.getSelected(Biome.class));
-                    }
-                    case 2 -> {
-                        if(biome.getBiome()==null){
-                            rollBiome(biome);
-                            sessionManager.add(Biome.class,biome.clone());
-                        }
-                        printWithFlair(biome);
-                    }
-                    case 3 -> {
-                        if(biome.getBiome()==null){
-                            rollBiome(biome);
-                            sessionManager.add(Biome.class,biome.clone());
-                        } else {
-                            reRollDetails(biome);
-                            sessionManager.add(Biome.class,biome.clone());
-                        }
-                        printWithFlair(biome);
-                    }
-                    case 4 -> biome = viewAll.run(dataInput,Biome.class);
-                    case 5 -> {
-                        if(biome.getBiome()==null){
-                            rollBiome(biome);
-                            sessionManager.add(Biome.class,biome.clone());
-                        }
-                        GenericFunctions.exportPW(biome);
-                    }
-                    case 6 -> {
-                        System.out.println("ACCESSING DATABASE...");
-                        return "DB_MENU";
-                    }
-                    case 0 -> System.out.println("Going back to main menu");
-
-                }
-            }while (option !=0);
-        }catch (Exception e){
-            System.out.println("\nPlease choose a valid option. Error: \n"+e.getMessage());
-        }
-        return menu;
     }
 
     @Override

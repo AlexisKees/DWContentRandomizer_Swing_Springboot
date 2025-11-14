@@ -22,24 +22,29 @@ public class CreditsForm extends JFrame {
     private void initializeForm(ApplicationContext context){
         setContentPane(contentPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500,500);
+        setSize(550,550);
         setLocationRelativeTo(null);
 
         creditsEditorPane.setText("""
-                Created by Alexis Kees Bahl.
-                Based on "The perilous wilds, revised edition".
+                Created by Alexis Kees Bahl. November of 2025.
+                Based on "The Perilous Wilds, revised edition".
                 
                 DISCLAIMER:
                 This app is a personal project. It was made
-                partly because I loved "The perilous wilds",
+                partly because I loved "The Perilous Wilds",
                 partly because I wanted to test my programming skills.
-                It is in no way meant to replace the book
-                and it the content of this app is not exactly
-                the same as the content in the book.
+                It is, in many ways, a work in progress and is open to contributions.
+                It is in no way meant to replace the book, nor could it do so.
                 
-                May this app help you improvise while playing
-                or sparkle your imagination while planning your next session.
-                                               
+                Also, the content of this app is not exactly
+                the same as the content in the book,
+                since I took the liberty to make many modifications
+                that made sense in context and add a few things I simply thought of.
+                
+                If you choose to use it,
+                may this app help you improvise while playing
+                or spark your imagination while planning your next session.
+                
                 Be free to make your contributions to my public repository at:
                 https://github.com/AlexisKees/DWContentRandomizer_Swing_Springboot.git
                 

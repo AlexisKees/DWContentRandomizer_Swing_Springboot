@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls.PickFrom;
 
@@ -107,11 +106,5 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IGenericC
 
 
     }
-
-    @Override
-    public String showOptions(Scanner dataInput, Class<AreaDanger> parameterClass) {
-        return "";
-    }
-
 
 }
