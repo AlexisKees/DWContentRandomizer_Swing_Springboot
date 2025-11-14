@@ -1,6 +1,7 @@
 package AlexisKeesBahl.DWRandomizer_Swing.service.util;
 
 import AlexisKeesBahl.DWRandomizer_Swing.model.IPWClass;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 
 @Service
+@Scope("singleton")
 public class SessionManager {
 
     private final Map<Class<? extends IPWClass>, List<IPWClass>> sessionLists = new HashMap<>();

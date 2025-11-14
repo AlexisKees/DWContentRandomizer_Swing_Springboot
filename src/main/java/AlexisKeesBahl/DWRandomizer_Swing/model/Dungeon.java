@@ -75,6 +75,8 @@ public class Dungeon implements IPWClass {
     }
 
     public void addArea(Area area){
+        System.out.println("Amount of rooms available: "+this.getRooms());
+        System.out.println("Amount of rooms occupied: "+this.getAreas().size());
         if(this.areas.size()<this.rooms){
             this.areas.add(area);
             System.out.println("AREA ADDED SUCCESFULLY!");

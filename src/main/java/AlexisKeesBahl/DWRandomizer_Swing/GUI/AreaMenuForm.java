@@ -100,9 +100,4 @@ public class AreaMenuForm extends JFrame {
         dangersLabel.setText(String.format("Dangers: %d",area.getDangersAmount()));
         dangersTextPane.setText(area.getDangers());
     }
-
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
 }

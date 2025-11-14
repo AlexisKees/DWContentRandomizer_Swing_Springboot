@@ -95,9 +95,12 @@ public class MainMenuForm extends JFrame{
             dispose();
         });
         followerButton.addActionListener(e -> {
+            /*
             FollowerMenuForm followerMenuForm = context.getBean(FollowerMenuForm.class);
             followerMenuForm.setVisible(true);
             dispose();
+
+             */
         });
         NPCButton.addActionListener(e -> {
             NPCMenuForm npcMenuForm = context.getBean(NPCMenuForm.class);
@@ -105,9 +108,12 @@ public class MainMenuForm extends JFrame{
             dispose();
         });
         questButton.addActionListener(e->{
+            /*
             QuestMenuForm questMenuForm = context.getBean(QuestMenuForm.class);
             questMenuForm.setVisible(true);
             dispose();
+
+             */
         });
         steadingButton.addActionListener(e ->{
             SteadingMenuForm steadingMenuForm = context.getBean(SteadingMenuForm.class);

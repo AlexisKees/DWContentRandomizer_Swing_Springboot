@@ -148,7 +148,8 @@ public class Area implements IPWClass {
                 Area: %s
                 Dressing: %s
                 Rarity: %s
-                Discoveries: %s
-                Dangers: %s""",this.areaType, this.areaDressing,this.rarity,this.getDiscoveries(),this.getDangers());
+                Discoveries:\n%s
+                Dangers:\n%s
+                --------------------------""",this.areaType, this.areaDressing,this.rarity,this.getDiscoveries(),this.getDangers());
     }
 }
