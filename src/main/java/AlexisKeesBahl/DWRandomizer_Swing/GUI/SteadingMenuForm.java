@@ -5,6 +5,7 @@ import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.SteadingService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Component
+@Scope("prototype")
 public class SteadingMenuForm extends JFrame{
     private final ApplicationContext context;
     private final SessionManager sessionManager;
@@ -40,11 +42,12 @@ public class SteadingMenuForm extends JFrame{
         this.genericFunctions=genericFunctions;
         if(sessionManager.getSelected(Steading.class)==null)
             this.steading= new Steading();
-        else
-            this.steading=sessionManager.getSelected(Steading.class);
+        else {
+            this.steading = sessionManager.getSelected(Steading.class);
+            updateFields();
+        }
 
         iniciarForma(context);
-
     }
     private void iniciarForma(ApplicationContext context){
         setContentPane(panel1);

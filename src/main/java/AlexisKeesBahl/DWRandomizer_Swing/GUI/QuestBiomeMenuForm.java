@@ -1,6 +1,7 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
 import AlexisKeesBahl.DWRandomizer_Swing.model.Biome;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
 import AlexisKeesBahl.DWRandomizer_Swing.service.BiomeService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
@@ -9,17 +10,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @Component
 @Scope("prototype")
-public class BiomeMenuForm extends JFrame {
+public class QuestBiomeMenuForm extends JFrame {
+
     private final BiomeService biomeService;
     private final GenericFunctions genericFunctions;
     private final SessionManager sessionManager;
     private final ApplicationContext context;
     private Biome biome;
+    private Quest quest;
     private JButton button1;
     private JPanel panel1;
     private JFormattedTextField biomeFormattedTextField;
@@ -34,43 +35,49 @@ public class BiomeMenuForm extends JFrame {
     private JButton rerollButton;
     private JButton exportButton;
 
-    public BiomeMenuForm( BiomeService biomeService,
-     GenericFunctions genericFunctions,
-     SessionManager sessionManager,
-     ApplicationContext context) {
+    public QuestBiomeMenuForm( BiomeService biomeService,
+                          GenericFunctions genericFunctions,
+                          SessionManager sessionManager,
+                          ApplicationContext context) {
         this.biomeService = biomeService;
         this.genericFunctions = genericFunctions;
         this. sessionManager = sessionManager;
         this.context = context;
-        if(sessionManager.getSelected(Biome.class)==null)
-            this.biome = new Biome();
-        else{
-            this.biome = sessionManager.getSelected(Biome.class);
+        if (sessionManager.getSelected(Quest.class)==null) {
+            this.quest = new Quest();
+            this.biome=new Biome();
+        }
+        else {
+            this.quest = sessionManager.getSelected(Quest.class);
+            this.biome = quest.getBiome();
             updateFields();
         }
-        iniciarForma();
+
+        iniciarForma(context);
+
     }
 
-    private void iniciarForma(){
+    private void iniciarForma(ApplicationContext context){
 
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400,600);
         setLocationRelativeTo(null);
+
         generateButton.addActionListener(e -> {
-           biomeService.rollBiome(biome);
-           sessionManager.add(Biome.class,biome);
-           updateFields();
+            biomeService.rollBiome(biome);
+            quest.setBiome(biome);
+            updateFields();
         });
 
         rerollButton.addActionListener(e -> {
             if(sessionManager.getSelected(Biome.class)==null){
                 biomeService.rollBiome(biome);
-                sessionManager.add(Biome.class,biome);
+                quest.setBiome(biome);
                 updateFields();
             } else {
                 biomeService.reRollDetails(biome);
-                sessionManager.add(Biome.class,biome);
+                quest.setBiome(biome);
                 updateFields();
             }
         });
@@ -85,17 +92,15 @@ public class BiomeMenuForm extends JFrame {
         });
 
 
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainMenuForm mainMenuForm = context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
+        button1.addActionListener(e -> {
+                QuestMenuForm questMenuForm = context.getBean(QuestMenuForm.class);
+                questMenuForm.setVisible(true);
+                questMenuForm.updateFields();
                 dispose();
-            }
         });
     }
 
-    private void updateFields() {
+    public void updateFields() {
         biomeFormattedTextField.setText(biome.getBiome());
         weatherFormattedTextField.setText(biome.getWeather());
         weatherIntensityFormattedTextField.setText(biome.getWeatherIntensity());

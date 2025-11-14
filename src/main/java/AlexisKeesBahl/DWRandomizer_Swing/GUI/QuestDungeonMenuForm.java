@@ -2,6 +2,7 @@ package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
 import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Dungeon;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
 import AlexisKeesBahl.DWRandomizer_Swing.service.DungeonService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
@@ -10,17 +11,18 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 @Component
 @Scope("prototype")
-public class DungeonMenuForm extends JFrame{
+public class QuestDungeonMenuForm extends JFrame {
+
     private final ApplicationContext context;
     private final SessionManager sessionManager;
     private final DungeonService dungeonService;
     private final GenericFunctions genericFunctions;
     private Dungeon dungeon;
+    private Quest quest;
     private JButton goBackButton;
     private JPanel panel1;
     private JFormattedTextField nameTextField;
@@ -41,45 +43,51 @@ public class DungeonMenuForm extends JFrame{
     private JLabel areasLabel;
     private JTextPane areasTextPane;
 
-    public DungeonMenuForm(ApplicationContext context,
-    SessionManager sessionManager,
-    DungeonService dungeonService,
-    GenericFunctions genericFunctions) {
+    public QuestDungeonMenuForm(ApplicationContext context,
+                           SessionManager sessionManager,
+                           DungeonService dungeonService,
+                           GenericFunctions genericFunctions) {
         this.context=context;
         this.sessionManager=sessionManager;
         this.dungeonService=dungeonService;
         this.genericFunctions=genericFunctions;
-        if (sessionManager.getSelected(Dungeon.class)==null)
-            this.dungeon = new Dungeon();
+
+        if (sessionManager.getSelected(Quest.class)==null) {
+            this.quest = new Quest();
+            this.dungeon=new Dungeon();
+        }
         else {
-            this.dungeon = sessionManager.getSelected(Dungeon.class);
+            this.quest = sessionManager.getSelected(Quest.class);
+            this.dungeon = quest.getDungeon();
             updateFields();
         }
 
-        iniciarForma();
+
+
+        iniciarForma(context);
 
     }
-    private void iniciarForma(){
+    private void iniciarForma(ApplicationContext context){
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450,700);
+        setSize(450,600);
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e -> {
             dungeonService.rollDungeon(dungeon);
-            sessionManager.add(Dungeon.class,dungeon);
+            quest.setDungeon(dungeon);
             updateFields();
         });
 
         addAreasButton.addActionListener(e -> {
-            if (sessionManager.getSelected(Dungeon.class)==null){
+            if (sessionManager.getSelected(Quest.class)==null){
                 dungeonService.rollDungeon(dungeon);
-                sessionManager.add(Dungeon.class,dungeon);
+                quest.setDungeon(dungeon);
                 updateFields();
             }
-            DungeonAreaForm dungeonAreaForm = context.getBean(DungeonAreaForm.class);
-            dungeonAreaForm.setVisible(true);
-            this.setVisible(false);
+            QuestDungeonAreaMenuForm questDungeonAreaMenuForm= context.getBean(QuestDungeonAreaMenuForm.class);
+            questDungeonAreaMenuForm.setVisible(true);
+            dispose();
         });
 
         exportButton.addActionListener(e->{
@@ -93,9 +101,10 @@ public class DungeonMenuForm extends JFrame{
 
 
         goBackButton.addActionListener(e -> {
-                MainMenuForm mainMenuForm = context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
-                dispose();
+            QuestMenuForm questMenuForm = context.getBean(QuestMenuForm.class);
+            questMenuForm.setVisible(true);
+            questMenuForm.updateFields();
+            dispose();
         });
     }
 
@@ -123,6 +132,8 @@ public class DungeonMenuForm extends JFrame{
                 areaNumber++;
             }
             areasTextPane.setText(str);
-        } else areasTextPane.setText("");
+        } else {
+            areasTextPane.setText("");
+        }
     }
 }

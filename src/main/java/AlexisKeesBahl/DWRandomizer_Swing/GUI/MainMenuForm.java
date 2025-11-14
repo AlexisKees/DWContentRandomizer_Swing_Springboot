@@ -107,12 +107,9 @@ public class MainMenuForm extends JFrame{
             dispose();
         });
         questButton.addActionListener(e->{
-            /*
             QuestMenuForm questMenuForm = context.getBean(QuestMenuForm.class);
             questMenuForm.setVisible(true);
             dispose();
-
-             */
         });
         steadingButton.addActionListener(e ->{
             SteadingMenuForm steadingMenuForm = context.getBean(SteadingMenuForm.class);

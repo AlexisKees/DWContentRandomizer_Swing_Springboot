@@ -161,7 +161,7 @@ public class Main implements CommandLineRunner {
                          if(menu.equals("DB_MENU")) {
                              if(sessionManager.getSelected(NPC.class)==null){
                                  NPC npc = new NPC();
-                                 npcService.rollFeatures(npc);
+                                 npcService.rollNPC(npc);
                                  sessionManager.add(NPC.class,npc);
                              }
                              dbMenu.run(dataInput, (NPC.class));

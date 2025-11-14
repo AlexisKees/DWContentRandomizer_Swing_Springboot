@@ -65,7 +65,7 @@ public class QuestService implements IGenericService<Quest>, IGenericCRUDService
         quest.setDungeon(new Dungeon());
         quest.setBiome(new Biome());
         dungeonService.rollDungeon(quest.getDungeon());
-        npcService.rollFeatures(quest.getQuestGiver());
+        npcService.rollNPC(quest.getQuestGiver());
         biomeService.rollBiome(quest.getBiome());
         quest.setOneLiner(String.format("%s's %s quest",quest.getQuestGiver().getName(),quest.getTask()));
 

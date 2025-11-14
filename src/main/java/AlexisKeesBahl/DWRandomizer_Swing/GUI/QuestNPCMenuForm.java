@@ -1,6 +1,7 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
 import AlexisKeesBahl.DWRandomizer_Swing.model.NPC;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.NPCService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
@@ -12,13 +13,15 @@ import javax.swing.*;
 
 @Component
 @Scope("prototype")
-public class NPCMenuForm extends JFrame{
+public class QuestNPCMenuForm extends JFrame {
+
 
     private final ApplicationContext context;
     private final SessionManager sessionManager;
     private final NPCService npcService;
     private final GenericFunctions genericFunctions;
     private NPC npc;
+    private Quest quest;
     private JButton goBackButton;
     private JPanel panel1;
     private JButton generateButton;
@@ -31,18 +34,21 @@ public class NPCMenuForm extends JFrame{
     private JFormattedTextField personalityFormattedTextField;
     private JFormattedTextField quirkFormattedTextField;
 
-    public NPCMenuForm(ApplicationContext context,
-    SessionManager sessionManager,
-    NPCService npcService,
-    GenericFunctions genericFunctions) {
+    public QuestNPCMenuForm(ApplicationContext context,
+                       SessionManager sessionManager,
+                       NPCService npcService,
+                       GenericFunctions genericFunctions) {
         this.context=context;
         this.sessionManager=sessionManager;
         this.npcService=npcService;
         this.genericFunctions=genericFunctions;
-        if(sessionManager.getSelected(NPC.class)==null)
+        if (sessionManager.getSelected(Quest.class)==null) {
+            this.quest = new Quest();
             this.npc=new NPC();
+        }
         else {
-            this.npc = sessionManager.getSelected(NPC.class);
+            this.quest = sessionManager.getSelected(Quest.class);
+            this.npc = quest.getQuestGiver();
             updateFields();
         }
 
@@ -59,7 +65,7 @@ public class NPCMenuForm extends JFrame{
 
         generateButton.addActionListener(e->{
             npcService.rollNPC(npc);
-            sessionManager.add(NPC.class,npc);
+            quest.setQuestGiver(npc);
             updateFields();
         });
 
@@ -83,13 +89,14 @@ public class NPCMenuForm extends JFrame{
         });
 
         goBackButton.addActionListener(e -> {
-                MainMenuForm mainMenuForm = context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
-                dispose();
+            QuestMenuForm questMenuForm = context.getBean(QuestMenuForm.class);
+            questMenuForm.setVisible(true);
+            questMenuForm.updateFields();
+            dispose();
         });
     }
 
-    private void updateFields() {
+    public void updateFields() {
         NPCFormattedTextField.setText(npc.getOneLiner());
         genderFormattedTextField.setText(npc.getGender());
         ageFormattedTextField.setText(npc.getAge());

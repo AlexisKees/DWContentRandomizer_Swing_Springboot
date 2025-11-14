@@ -5,6 +5,7 @@ import AlexisKeesBahl.DWRandomizer_Swing.service.DangerService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Component
+@Scope("prototype")
 public class DangerMenuForm extends JFrame {
     private final ApplicationContext context;
     private final SessionManager sessionManager;
@@ -38,13 +40,12 @@ public class DangerMenuForm extends JFrame {
         this.genericFunctions = genericFunctions;
         if (sessionManager.getSelected(Danger.class)==null)
             this.danger = new Danger();
-        else
+        else {
             this.danger = sessionManager.getSelected(Danger.class);
-
-
+            updateFields();
+        }
         iniciarForma(context);
-
-    }
+        }
 
     private void iniciarForma(ApplicationContext context){
         setContentPane(panel1);
@@ -79,6 +80,7 @@ public class DangerMenuForm extends JFrame {
         exportButton.addActionListener(e->{
             try{
                 genericFunctions.exportPW(danger);
+                JOptionPane.showMessageDialog(this,"Check your files!");
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(this, "Couldn't export danger...");
             }

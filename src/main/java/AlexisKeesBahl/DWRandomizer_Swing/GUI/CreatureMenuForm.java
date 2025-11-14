@@ -5,6 +5,7 @@ import AlexisKeesBahl.DWRandomizer_Swing.service.CreatureService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Component
+@Scope("prototype")
 public class CreatureMenuForm extends JFrame {
     private final ApplicationContext context;
     private final SessionManager sessionManager;
@@ -47,11 +49,12 @@ public class CreatureMenuForm extends JFrame {
         this.genericFunctions=genericFunctions;
         if(sessionManager.getSelected(Creature.class)==null)
             this.creature = new Creature();
-        else
+        else {
             this.creature = sessionManager.getSelected(Creature.class);
+            updateFields();
+        }
 
         iniciarForma(context);
-
     }
 
     private void iniciarForma(ApplicationContext context){

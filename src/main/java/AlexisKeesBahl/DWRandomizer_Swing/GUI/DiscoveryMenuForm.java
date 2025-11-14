@@ -6,6 +6,7 @@ import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Component
+@Scope("prototype")
 public class DiscoveryMenuForm extends JFrame{
 
     private final ApplicationContext context;
@@ -40,13 +42,14 @@ public class DiscoveryMenuForm extends JFrame{
         this.genericFunctions=genericFunctions;
         if(sessionManager.getSelected(Discovery.class)==null)
             this.discovery = new Discovery();
-        else
+        else {
             this.discovery = sessionManager.getSelected(Discovery.class);
+            updateFields();
+        }
 
 
         iniciarForma(context);
-
-    }
+        }
 
     private void iniciarForma(ApplicationContext context){
         setContentPane(panel1);
@@ -83,6 +86,7 @@ public class DiscoveryMenuForm extends JFrame{
         exportButton.addActionListener(e ->{
             try {
                 genericFunctions.exportPW(discovery);
+                JOptionPane.showMessageDialog(this,"Check your files!");
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(this,"Couldn't export discovery...");
             }

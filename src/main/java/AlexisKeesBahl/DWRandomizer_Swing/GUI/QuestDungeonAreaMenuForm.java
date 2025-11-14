@@ -1,7 +1,10 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
 import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Dungeon;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
 import AlexisKeesBahl.DWRandomizer_Swing.service.AreaService;
+import AlexisKeesBahl.DWRandomizer_Swing.service.DungeonService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +13,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @Component
 @Scope("prototype")
-public class AreaMenuForm extends JFrame {
+public class QuestDungeonAreaMenuForm extends JFrame {
+
 
     private final SessionManager sessionManager;
     private final AreaService areaService;
@@ -24,7 +26,7 @@ public class AreaMenuForm extends JFrame {
     private JPanel panel1;
     private JButton newAreaButton;
     private JButton rerollButton;
-    private JButton exportButton;
+    private JButton addButton;
     private JButton goBackButton;
     private JFormattedTextField areaFormattedTextField;
     private JTextPane dressingTextPane;
@@ -34,26 +36,36 @@ public class AreaMenuForm extends JFrame {
     private JLabel discoveriesLabel;
     private JLabel dangersLabel;
     private Area area;
+    private Quest quest;
+    private Dungeon dungeon;
+    private final DungeonService dungeonService;
 
     @Autowired
-    public AreaMenuForm(ApplicationContext context,
-                        SessionManager sessionManager,
-                        AreaService areaService,
-                        GenericFunctions genericFunctions){
+    public QuestDungeonAreaMenuForm(ApplicationContext context,
+                           SessionManager sessionManager,
+                           AreaService areaService,
+                           GenericFunctions genericFunctions,
+                           DungeonService dungeonService){
 
         this.areaService=areaService;
         this.sessionManager=sessionManager;
         this.context = context;
         this.genericFunctions = genericFunctions;
-        if(sessionManager.getSelected(Area.class)==null) {
-            this.area = new Area();
-        } else {
-            this.area = sessionManager.getSelected(Area.class);
+        this.dungeonService=dungeonService;
+        this.area=new Area();
+        if (sessionManager.getSelected(Quest.class)==null) {
+            this.quest = new Quest();
+            this.dungeon=new Dungeon();
+        }
+        else {
+            this.quest = sessionManager.getSelected(Quest.class);
+            this.dungeon = quest.getDungeon();
             updateFields();
         }
-        iniciarForma(context);
-    }
 
+        iniciarForma(context);
+
+    }
 
     private void iniciarForma(ApplicationContext context){
         setContentPane(panel1);
@@ -63,34 +75,25 @@ public class AreaMenuForm extends JFrame {
 
         newAreaButton.addActionListener(e ->{
             areaService.rollArea(area);
-            sessionManager.add(Area.class,area.clone());
             updateFields();
         });
 
 
         rerollButton.addActionListener(e -> {
             areaService.rollAreaDetails(area);
-            sessionManager.add(Area.class,area.clone());
             updateFields();
         });
 
-        exportButton.addActionListener(e -> {
-            try {
-                genericFunctions.exportPW(this.area);
-                JOptionPane.showMessageDialog(this, "Check your files!");
-            } catch (Exception ex){
-                dispose();
-            }
+        addButton.addActionListener(e -> {
+            dungeon.addArea(area);
         });
 
 
-        goBackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainMenuForm mainMenuForm = context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
-                dispose();
-            }
+        goBackButton.addActionListener(e->{
+            QuestDungeonMenuForm questDungeonMenuForm = context.getBean(QuestDungeonMenuForm.class);
+            questDungeonMenuForm.setVisible(true);
+            dispose();
+            questDungeonMenuForm.updateFields();
         });
     }
 

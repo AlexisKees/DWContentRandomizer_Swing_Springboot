@@ -5,6 +5,7 @@ import AlexisKeesBahl.DWRandomizer_Swing.service.FollowerService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Component
+@Scope("prototype")
 public class FollowerMenuForm extends JFrame{
     private final ApplicationContext context;
     private final SessionManager sessionManager;
@@ -45,8 +47,10 @@ public class FollowerMenuForm extends JFrame{
         this.genericFunctions=genericFunctions;
         if(sessionManager.getSelected(Follower.class)==null)
             this.follower=new Follower();
-        else
-            this.follower=sessionManager.getSelected(Follower.class);
+        else {
+            this.follower = sessionManager.getSelected(Follower.class);
+            updateFields();
+        }
 
         iniciarForma();
 

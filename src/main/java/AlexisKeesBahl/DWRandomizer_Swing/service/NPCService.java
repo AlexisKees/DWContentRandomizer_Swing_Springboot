@@ -52,7 +52,7 @@ public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC
     }
 
 
-    public void rollFeatures(NPC npc){
+    public void rollNPC(NPC npc){
         //set race rarity, races array and race
         String rarity = PickFrom(CreatureArrays.SUBCATEGORIES_HUMANOID);
         switch (rarity) {
@@ -159,13 +159,13 @@ public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC
 
                 switch (option) {
                     case 1 -> {
-                        rollFeatures(npc);
+                        rollNPC(npc);
                         printWithFlair(npc);
                         sessionManager.add(NPC.class,npc.clone());
                     }
                     case 2 -> {
                         if (npc.getRace()==null) {
-                            rollFeatures(npc);
+                            rollNPC(npc);
                             sessionManager.add(NPC.class,npc.clone());
                         }
                         printWithFlair(npc);

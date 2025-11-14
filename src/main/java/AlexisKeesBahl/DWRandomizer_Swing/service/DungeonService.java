@@ -1,6 +1,7 @@
 package AlexisKeesBahl.DWRandomizer_Swing.service;
 
 import AlexisKeesBahl.DWRandomizer_Swing.data.DungeonArrays;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Dungeon;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Steading;
 import AlexisKeesBahl.DWRandomizer_Swing.model.util.Rolls;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -64,6 +66,8 @@ public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDSer
 
 
     public void rollDungeon(Dungeon dungeon){
+        List<Area> areas = new ArrayList<>();
+        dungeon.setAreas(areas);
 
         //set name template and name
         dungeon.setNameTemplate(PickFrom(DungeonArrays.DUNGEON_NAME_TEMPLATES));
