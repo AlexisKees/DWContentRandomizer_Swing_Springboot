@@ -51,11 +51,11 @@ public class AreaMenuForm extends JFrame {
             this.area = sessionManager.getSelected(Area.class);
             updateFields();
         }
-        iniciarForma(context);
+        initializeForm(context);
     }
 
 
-    private void iniciarForma(ApplicationContext context){
+    private void initializeForm(ApplicationContext context){
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400,600);

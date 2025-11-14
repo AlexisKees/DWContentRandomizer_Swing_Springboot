@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 @Component
 @Scope("prototype")
@@ -61,13 +60,9 @@ public class QuestDungeonMenuForm extends JFrame {
             this.dungeon = quest.getDungeon();
             updateFields();
         }
-
-
-
-        iniciarForma(context);
-
+        initializeForm(context);
     }
-    private void iniciarForma(ApplicationContext context){
+    private void initializeForm(ApplicationContext context){
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450,600);

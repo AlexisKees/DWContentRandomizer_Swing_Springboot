@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @Component
 @Scope("prototype")
@@ -56,10 +54,10 @@ public class DungeonMenuForm extends JFrame{
             updateFields();
         }
 
-        iniciarForma();
+        initializeForm();
 
     }
-    private void iniciarForma(){
+    private void initializeForm(){
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450,700);

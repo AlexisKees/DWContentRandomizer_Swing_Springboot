@@ -48,10 +48,10 @@ public class BiomeMenuForm extends JFrame {
             this.biome = sessionManager.getSelected(Biome.class);
             updateFields();
         }
-        iniciarForma();
+        initializeForm();
     }
 
-    private void iniciarForma(){
+    private void initializeForm(){
 
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

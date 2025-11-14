@@ -29,6 +29,7 @@ public class MainMenuForm extends JFrame{
     private JButton questButton;
     private JButton steadingButton;
     private JButton quitButton;
+    private JButton creditsButton;
 
     DBMenu dbMenu;
     AreaService areaService;
@@ -62,7 +63,7 @@ public class MainMenuForm extends JFrame{
         this.sessionManager =sessionManager;
         this.subMenu=subMenu;
 
-        iniciarForma();
+        initializeForm();
 
         AreaButton.addActionListener(e -> {
             AreaMenuForm areaMenuForm = context.getBean(AreaMenuForm.class);
@@ -116,12 +117,19 @@ public class MainMenuForm extends JFrame{
             steadingMenuForm.setVisible(true);
             dispose();
         });
+
+        creditsButton.addActionListener(e->{
+            CreditsForm creditsForm = context.getBean(CreditsForm.class);
+            creditsForm.setVisible(true);
+            dispose();
+        });
+
         quitButton.addActionListener(e -> {
             System.exit(0);
         });
     }
 
-    private void iniciarForma(){
+    private void initializeForm(){
         setContentPane(MainFrame);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400,600);

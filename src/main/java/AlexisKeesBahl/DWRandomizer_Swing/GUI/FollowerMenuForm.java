@@ -54,10 +54,10 @@ public class FollowerMenuForm extends JFrame{
             updateFields();
         }
 
-        iniciarForma();
+        initializeForm();
 
     }
-    private void iniciarForma(){
+    private void initializeForm(){
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400,600);
