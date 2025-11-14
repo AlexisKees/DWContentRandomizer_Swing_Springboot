@@ -159,11 +159,14 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
 
     public void addTag(Follower f){
         String tag;
+        int maxRolls=10;
+        int roll = 1;
         boolean tagAlreadyExists;
         do {
             tag = PickFrom(NPCArrays.FOLLOWER_TAGS);
             tagAlreadyExists = ((f.getTags().contains(tag))||(f.getTags().contains(tag.toLowerCase())));
-        } while (tagAlreadyExists);
+            roll++;
+        } while (tagAlreadyExists||roll==maxRolls);
 
         if (f.getTags().isEmpty()) f.setTags(tag);
         else f.setTags(f.getTags()+", "+tag.toLowerCase());

@@ -29,11 +29,13 @@ public class FollowerMenuForm extends JFrame{
     private JFormattedTextField ageFormattedTextField;
     private JFormattedTextField instinctFormattedTextField;
     private JFormattedTextField costFormattedTextField;
+    private JFormattedTextField tagsFormattedTextField;
     private JLabel hpLabel;
     private JLabel armorLabel;
     private JLabel damageLabel;
     private JLabel qualityLabel;
     private JLabel loyaltyLabel;
+
 
 
     public FollowerMenuForm(
@@ -61,21 +63,41 @@ public class FollowerMenuForm extends JFrame{
         setSize(400,600);
         setLocationRelativeTo(null);
 
-        generateButton.addActionListener(e->{
-            followerService.rollFollower(follower);
-            sessionManager.add(Follower.class,follower);
-            updateFields();
+        generateButton.addActionListener(e -> {
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() {
+                    followerService.rollFollower(follower);
+                    sessionManager.add(Follower.class,follower);
+                    return null;
+                }
+                @Override
+                protected void done() {
+                    updateFields();
+                }
+            }.execute();
         });
 
-        rerollButton.addActionListener(e ->{
-            if(sessionManager.getSelected(Follower.class)==null)
-                followerService.rollFollower(follower);
-            else
-                followerService.rollFollowerDetails(follower);
+        rerollButton.addActionListener(e -> {
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() {
+                    if (sessionManager.getSelected(Follower.class)==null)
+                        followerService.rollFollower(follower);
+                    else
+                        followerService.rollFollowerDetails(follower);
 
-            sessionManager.add(Follower.class,follower);
-            updateFields();
+                    sessionManager.add(Follower.class,follower);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    updateFields();
+                }
+            }.execute();
         });
+
 
         exportButton.addActionListener(e->{
             try{
@@ -106,5 +128,6 @@ public class FollowerMenuForm extends JFrame{
         damageLabel.setText("Damage: "+follower.getDamage());
         qualityLabel.setText("Quality: "+follower.getQuality());
         loyaltyLabel.setText("Loyalty: "+follower.getLoyalty());
+        tagsFormattedTextField.setText(follower.getTags());
     }
 }
