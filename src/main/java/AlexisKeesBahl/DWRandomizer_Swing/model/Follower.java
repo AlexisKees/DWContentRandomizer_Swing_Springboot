@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -37,6 +40,7 @@ public class Follower implements IPWClass {
 
     private boolean hasShield;
     private String damage;
+    private List<String> availableTags = new ArrayList<>();
     private String tags ="";
 
     private String oneLiner;

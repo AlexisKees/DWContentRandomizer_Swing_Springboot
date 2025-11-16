@@ -93,7 +93,7 @@ public class MainMenuForm extends JFrame{
             CreditsForm creditsForm = context.getBean(CreditsForm.class);
             creditsForm.setVisible(true);
             dispose();
-        });
+        }) ;
 
         quitButton.addActionListener(e -> {
             System.exit(0);

@@ -20,7 +20,7 @@ public class DungeonMenuForm extends JFrame{
     private final GenericFunctions genericFunctions;
     private Dungeon dungeon;
     private JButton goBackButton;
-    private JPanel panel1;
+    private JPanel panel1; 
     private JFormattedTextField nameTextField;
     private JFormattedTextField sizeFormattedTextField;
     private JFormattedTextField roomsFormattedTextField;

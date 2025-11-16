@@ -21,7 +21,7 @@ public class CreatureMenuForm extends JFrame {
     private final GenericFunctions genericFunctions;
     private Creature creature;
     private JButton goBackButton;
-    private JPanel panel1;
+     private JPanel panel1;
     private JButton generateButton;
     private JButton rerollSubcategoryButton;
     private JButton rerollSpeciesButton;
@@ -43,7 +43,7 @@ public class CreatureMenuForm extends JFrame {
     SessionManager sessionManager,
     CreatureService creatureService,
     GenericFunctions genericFunctions) {
-        this.context=context;
+         this.context=context;
         this.sessionManager=sessionManager;
         this.creatureService=creatureService;
         this.genericFunctions=genericFunctions;
@@ -54,7 +54,7 @@ public class CreatureMenuForm extends JFrame {
             updateFields();
         }
 
-        initializeForm(context);
+         initializeForm(context);
     }
 
     private void initializeForm(ApplicationContext context){

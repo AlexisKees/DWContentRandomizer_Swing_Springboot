@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 
 @Component
 @Scope("prototype")
-public class DiscoveryMenuForm extends JFrame{
+public class  DiscoveryMenuForm extends JFrame{
 
     private final ApplicationContext context;
     private final SessionManager sessionManager;

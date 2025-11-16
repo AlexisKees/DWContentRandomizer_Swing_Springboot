@@ -44,7 +44,7 @@ public class DangerMenuForm extends JFrame {
             this.danger = sessionManager.getSelected(Danger.class);
             updateFields();
         }
-        initializeForm(context);
+        initializeForm(context); 
         }
 
     private void initializeForm(ApplicationContext context){

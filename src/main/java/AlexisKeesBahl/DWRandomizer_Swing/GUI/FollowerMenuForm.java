@@ -19,7 +19,7 @@ public class FollowerMenuForm extends JFrame{
     private final SessionManager sessionManager;
     private final FollowerService followerService;
     private final GenericFunctions genericFunctions;
-    private Follower follower;
+     private Follower follower;
     private JButton goBackButton;
     private JPanel panel1;
     private JButton generateButton;
@@ -64,38 +64,19 @@ public class FollowerMenuForm extends JFrame{
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e -> {
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() {
-                    followerService.rollFollower(follower);
-                    sessionManager.add(Follower.class,follower);
-                    return null;
-                }
-                @Override
-                protected void done() {
-                    updateFields();
-                }
-            }.execute();
+            followerService.rollFollower(follower);
+            sessionManager.add(Follower.class,follower);
+            updateFields();
         });
 
         rerollButton.addActionListener(e -> {
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() {
-                    if (sessionManager.getSelected(Follower.class)==null)
-                        followerService.rollFollower(follower);
-                    else
-                        followerService.rollFollowerDetails(follower);
+            if (sessionManager.getSelected(Follower.class)==null)
+                followerService.rollFollower(follower);
+            else
+                followerService.rollFollowerDetails(follower);
 
-                    sessionManager.add(Follower.class,follower);
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    updateFields();
-                }
-            }.execute();
+            sessionManager.add(Follower.class,follower);
+            updateFields();
         });
 
 

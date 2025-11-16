@@ -52,7 +52,6 @@ public class BiomeMenuForm extends JFrame {
     }
 
     private void initializeForm(){
-
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400,600);

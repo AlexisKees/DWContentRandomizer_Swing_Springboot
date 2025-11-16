@@ -2,6 +2,7 @@ package AlexisKeesBahl.DWRandomizer_Swing.model.util;
 
 
 
+import java.util.List;
 import java.util.Random;
 
 public class Rolls {
@@ -54,8 +55,16 @@ public class Rolls {
      return (int) (Math.random()*a.length);
     }
 
+    public static int UniversalRoll(List<String> list){
+        return (int) (Math.random()*list.size());
+    }
+
     public static String PickFrom(String[] a){
         return a[Rolls.UniversalRoll(a)];
+    }
+
+    public static String PickFrom(List<String> list){
+        return list.get(UniversalRoll(list));
     }
 
     public static boolean rollBoolean(){

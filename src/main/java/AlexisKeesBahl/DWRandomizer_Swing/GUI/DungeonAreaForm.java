@@ -57,7 +57,7 @@ public class DungeonAreaForm extends JFrame{
 
         if(sessionManager.getSelected(Dungeon.class)==null)
             this.dungeon = new Dungeon();
-        else {
+        else { 
             this.dungeon = sessionManager.getSelected(Dungeon.class);
             updateFields();
         }

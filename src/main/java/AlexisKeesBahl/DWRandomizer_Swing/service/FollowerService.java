@@ -45,6 +45,12 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
 
 
     public void rollFollower(Follower follower){
+        int i;
+        for (i=0;i<NPCArrays.FOLLOWER_TAGS.length;i++){
+            follower.getAvailableTags().add(NPCArrays.FOLLOWER_TAGS[i]);
+        }
+        follower.setTags("");
+
         String rarity = PickFrom(CreatureArrays.SUBCATEGORIES_HUMANOID);
         switch (rarity) {
             case "Uncommon" -> follower.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_UNCOMMON);
@@ -151,24 +157,18 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
     }
 
     public void addTag(Follower f){
-        String tag;
-        int maxRolls=10;
-        int roll = 1;
-        boolean tagAlreadyExists;
-        do {
-            tag = PickFrom(NPCArrays.FOLLOWER_TAGS);
-            tagAlreadyExists = ((f.getTags().contains(tag))||(f.getTags().contains(tag.toLowerCase())));
-            roll++;
-        } while (tagAlreadyExists||roll==maxRolls);
+        String tag = PickFrom(f.getAvailableTags());
 
         if (f.getTags().isEmpty()) f.setTags(tag);
         else f.setTags(f.getTags()+", "+tag.toLowerCase());
+
+        f.getAvailableTags().remove(tag);
     }
 
     public void addTag(Follower f, String tag){
         boolean tagAlreadyExists = ((f.getTags().contains(tag))||(f.getTags().contains(tag.toLowerCase())));
 
-        if (f.getTags().isEmpty()) f.setTags(tag);
+        if (f.getTags().equals("")) f.setTags(tag);
         else if (!tagAlreadyExists) f.setTags(f.getTags()+", "+tag.toLowerCase());
     }
 
