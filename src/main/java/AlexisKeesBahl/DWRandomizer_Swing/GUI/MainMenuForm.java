@@ -99,19 +99,16 @@ public class MainMenuForm extends JFrame{
         });
     }
 
-    // buildUI implementation for MainMenuForm with fill-aligned buttons and padding spacers
 
     private void buildUI() {
         MainFrame = new JPanel();
         MainFrame.setLayout(new BorderLayout());
 
-        // Outer padding panel
         JPanel padded = new JPanel();
         padded.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         padded.setLayout(new BorderLayout());
         MainFrame.add(padded, BorderLayout.CENTER);
 
-        // Top title section
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
@@ -129,7 +126,6 @@ public class MainMenuForm extends JFrame{
         topPanel.add(Box.createRigidArea(new Dimension(0,20)));
         padded.add(topPanel, BorderLayout.NORTH);
 
-        // Center buttons grid
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

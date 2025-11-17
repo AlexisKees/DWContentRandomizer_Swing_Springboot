@@ -25,7 +25,6 @@ public class DungeonMenuForm extends JFrame {
 
     private Dungeon dungeon;
 
-    // Componentes
     private JButton goBackButton;
     private JButton generateButton;
     private JButton addAreasButton;

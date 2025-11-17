@@ -81,17 +81,14 @@ public class QuestBiomeMenuForm extends JFrame {
 
     private void buildUI() {
 
-        // Fuentes
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
 
-        // Panel principal con padding
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ---------- TÍTULO ----------
         JLabel title = new JLabel("Random biome generator");
         title.setFont(titleFont);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -102,7 +99,6 @@ public class QuestBiomeMenuForm extends JFrame {
 
         main.add(top, BorderLayout.NORTH);
 
-        // ---------- PANEL CENTRAL ----------
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 0, 4, 0);
@@ -113,7 +109,6 @@ public class QuestBiomeMenuForm extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Helper para crear cada fila
         biomeFormattedTextField = addField(center, gbc, "Biome:", labelFont, fieldFont);
         weatherFormattedTextField = addField(center, gbc, "Weather:", labelFont, fieldFont);
         weatherIntensityFormattedTextField = addField(center, gbc, "Weather intensity:", labelFont, fieldFont);
@@ -129,7 +124,6 @@ public class QuestBiomeMenuForm extends JFrame {
 
         main.add(center, BorderLayout.CENTER);
 
-        // ---------- PANEL INFERIOR (BOTONES) ----------
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 
@@ -149,7 +143,6 @@ public class QuestBiomeMenuForm extends JFrame {
         bottom.add(row);
         bottom.add(Box.createVerticalStrut(8));
 
-        // Back button ocupa toda la fila
         backButton = new JButton("Go back");
         backButton.setFont(buttonFont);
 
@@ -160,7 +153,7 @@ public class QuestBiomeMenuForm extends JFrame {
         main.add(bottom, BorderLayout.SOUTH);
 
         setContentPane(main);
-        pack(); // Ajusta la ventana al contenido real
+        pack();
         setLocationRelativeTo(null);
     }
 

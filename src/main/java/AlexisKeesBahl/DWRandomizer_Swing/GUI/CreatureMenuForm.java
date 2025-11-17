@@ -22,7 +22,6 @@ public class CreatureMenuForm extends JFrame {
 
     private Creature creature;
 
-    // Campos
     private JFormattedTextField categoryField;
     private JFormattedTextField subcategoryField;
     private JFormattedTextField speciesField;
@@ -35,7 +34,6 @@ public class CreatureMenuForm extends JFrame {
     private JFormattedTextField alignmentField;
     private JFormattedTextField dispositionField;
 
-    // Botones
     private JButton generateButton;
     private JButton rerollSubButton;
     private JButton rerollSpeciesButton;
@@ -62,9 +60,6 @@ public class CreatureMenuForm extends JFrame {
         initializeListeners();
     }
 
-    // -----------------------------------------------------------
-    //  UI
-    // -----------------------------------------------------------
     private void buildUI() {
 
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
@@ -75,7 +70,6 @@ public class CreatureMenuForm extends JFrame {
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ---------- TITLE ----------
         JLabel title = new JLabel("Random creature generator");
         title.setFont(titleFont);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -86,7 +80,6 @@ public class CreatureMenuForm extends JFrame {
 
         main.add(top, BorderLayout.NORTH);
 
-        // ---------- SCROLL + CENTER ----------
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 0, 4, 0);
@@ -103,7 +96,6 @@ public class CreatureMenuForm extends JFrame {
         groupSizeField = addField(center, gbc, "Group size:", labelFont, fieldFont);
         individualSizeField = addField(center, gbc, "Individual size:", labelFont, fieldFont);
 
-        // ---------- HP + ARMOR (fila horizontal especial) ----------
         addHPArmor(center, gbc, labelFont, fieldFont);
 
         damageField = addField(center, gbc, "Damage:", labelFont, fieldFont);
@@ -119,7 +111,6 @@ public class CreatureMenuForm extends JFrame {
         scroll.setBorder(null);
         main.add(scroll, BorderLayout.CENTER);
 
-        // ---------- BOTTOM BUTTONS ----------
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 
@@ -155,7 +146,6 @@ public class CreatureMenuForm extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Helper para crear filas Label + Field
     private JFormattedTextField addField(JPanel parent, GridBagConstraints gbc,
                                          String txt, Font labelFont, Font fieldFont) {
 
@@ -173,7 +163,6 @@ public class CreatureMenuForm extends JFrame {
         return field;
     }
 
-    // HP - Armor en una sola fila horizontal
     private void addHPArmor(JPanel parent, GridBagConstraints gbc,
                             Font labelFont, Font fieldFont) {
 
@@ -213,9 +202,6 @@ public class CreatureMenuForm extends JFrame {
         return b;
     }
 
-    // -----------------------------------------------------------
-    //  Event Listeners
-    // -----------------------------------------------------------
     private void initializeListeners() {
 
         generateButton.addActionListener(e -> {
@@ -255,9 +241,6 @@ public class CreatureMenuForm extends JFrame {
         });
     }
 
-    // -----------------------------------------------------------
-    //  Update fields
-    // -----------------------------------------------------------
     private void updateFields() {
         categoryField.setText(creature.getCategory());
         subcategoryField.setText(creature.getSubcategory());

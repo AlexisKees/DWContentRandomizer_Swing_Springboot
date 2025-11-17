@@ -31,7 +31,6 @@ public class CreditsForm extends JFrame {
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ---------- TITLE ----------
         JLabel title = new JLabel("Credits");
         title.setFont(titleFont);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -40,7 +39,6 @@ public class CreditsForm extends JFrame {
         top.add(title, BorderLayout.CENTER);
         top.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
 
-        // ---------- EDITOR WITH SCROLL ----------
         creditsEditorPane = new JEditorPane();
         creditsEditorPane.setEditable(false);
         creditsEditorPane.setFont(textFont);
@@ -49,11 +47,9 @@ public class CreditsForm extends JFrame {
         JScrollPane scroll = new JScrollPane(creditsEditorPane);
         scroll.setBorder(BorderFactory.createEmptyBorder());
 
-        // Make scroll area stretch vertically with a center panel
         JPanel center = new JPanel(new BorderLayout());
         center.add(scroll, BorderLayout.CENTER);
 
-        // ---------- BUTTON ----------
         goBackButton = new JButton("Go back");
         goBackButton.setFont(buttonFont);
 
@@ -61,7 +57,6 @@ public class CreditsForm extends JFrame {
         bottom.add(goBackButton, BorderLayout.CENTER);
         bottom.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
 
-        // Add everything to main panel
         main.add(top, BorderLayout.NORTH);
         main.add(center, BorderLayout.CENTER);
         main.add(bottom, BorderLayout.SOUTH);

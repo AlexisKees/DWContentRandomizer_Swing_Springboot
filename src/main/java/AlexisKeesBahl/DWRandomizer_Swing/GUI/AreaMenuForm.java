@@ -21,7 +21,6 @@ public class AreaMenuForm extends JFrame {
     private final ApplicationContext context;
     private final GenericFunctions genericFunctions;
 
-    // Swing components
     private JFormattedTextField areaFormattedTextField;
     private JTextPane dressingTextPane;
     private JTextPane rarityTextPane;
@@ -58,9 +57,7 @@ public class AreaMenuForm extends JFrame {
         initializeForm();
     }
 
-    /**
-     * Construye toda la UI a mano, sin .form ni $$$setupUI$$$.
-     */
+
     private void buildUI() {
         // Fuentes
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);

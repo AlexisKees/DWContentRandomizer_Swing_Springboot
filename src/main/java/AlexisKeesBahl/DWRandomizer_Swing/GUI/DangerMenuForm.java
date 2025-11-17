@@ -51,9 +51,6 @@ public class DangerMenuForm extends JFrame {
         initializeListeners();
     }
 
-    // ---------------------------------------------------------
-    // UI
-    // ---------------------------------------------------------
     private void buildUI() {
 
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
@@ -64,7 +61,7 @@ public class DangerMenuForm extends JFrame {
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ---------- TITLE ----------
+
         JLabel title = new JLabel("Random danger generator");
         title.setFont(titleFont);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -75,7 +72,6 @@ public class DangerMenuForm extends JFrame {
 
         main.add(top, BorderLayout.NORTH);
 
-        // ---------- CENTER ----------
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 0, 4, 0);
@@ -86,11 +82,9 @@ public class DangerMenuForm extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Campos
         categoryField = addField(center, gbc, "Category:", labelFont, fieldFont);
         subcategoryField = addField(center, gbc, "Subcategory:", labelFont, fieldFont);
 
-        // ---------- DANGER TEXTPANE ----------
         JLabel lblDanger = new JLabel("Danger:");
         lblDanger.setFont(labelFont);
         center.add(lblDanger, gbc);
@@ -112,7 +106,6 @@ public class DangerMenuForm extends JFrame {
 
         main.add(center, BorderLayout.CENTER);
 
-        // ---------- BOTTOM BUTTONS ----------
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 
@@ -172,9 +165,6 @@ public class DangerMenuForm extends JFrame {
         return b;
     }
 
-    // ---------------------------------------------------------
-    // Listeners
-    // ---------------------------------------------------------
     private void initializeListeners() {
 
         generateButton.addActionListener(e -> {
@@ -211,9 +201,6 @@ public class DangerMenuForm extends JFrame {
         });
     }
 
-    // ---------------------------------------------------------
-    // Update UI
-    // ---------------------------------------------------------
     private void updateFields() {
         categoryField.setText(danger.getCategory());
         subcategoryField.setText(danger.getSubcategory());

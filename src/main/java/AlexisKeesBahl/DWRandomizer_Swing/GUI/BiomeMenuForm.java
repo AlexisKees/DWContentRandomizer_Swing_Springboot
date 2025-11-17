@@ -22,7 +22,6 @@ public class BiomeMenuForm extends JFrame {
 
     private Biome biome;
 
-    // Campos Swing
     private JFormattedTextField biomeFormattedTextField;
     private JFormattedTextField weatherFormattedTextField;
     private JFormattedTextField weatherIntensityFormattedTextField;
@@ -58,9 +57,7 @@ public class BiomeMenuForm extends JFrame {
         initializeForm();
     }
 
-    /**
-     * Construcción manual de la UI (sin .form)
-     */
+
     private void buildUI() {
 
         // Fuentes
@@ -146,9 +143,7 @@ public class BiomeMenuForm extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    /**
-     * Helper para crear cada fila Label + JFormattedTextField
-     */
+
     private JFormattedTextField addField(JPanel parent, GridBagConstraints gbc, String title, Font labelFont, Font fieldFont) {
 
         JLabel label = new JLabel(title);
