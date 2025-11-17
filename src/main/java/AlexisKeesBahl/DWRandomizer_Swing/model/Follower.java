@@ -43,7 +43,7 @@ public class Follower implements IPWClass {
     private List<String> availableTags = new ArrayList<>();
     private String tags ="";
 
-    private String oneLiner;
+    private String oneLiner="";
 
     @Override
     public String toString(){

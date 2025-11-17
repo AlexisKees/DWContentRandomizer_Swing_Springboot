@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import java.awt.*;
 
 @Component
 @Scope("prototype")
@@ -23,16 +24,16 @@ public class QuestNPCMenuForm extends JFrame {
     private NPC npc;
     private Quest quest;
     private JButton goBackButton;
-    private JPanel panel1;
     private JButton generateButton;
     private JButton rerollButton;
     private JButton exportButton;
-    private JFormattedTextField NPCFormattedTextField;
-    private JFormattedTextField genderFormattedTextField;
-    private JFormattedTextField ageFormattedTextField;
-    private JFormattedTextField appearanceFormattedTextField;
-    private JFormattedTextField personalityFormattedTextField;
-    private JFormattedTextField quirkFormattedTextField;
+    private JFormattedTextField npcField;
+    private JFormattedTextField genderField;
+    private JFormattedTextField ageField;
+    private JFormattedTextField appearanceField;
+    private JFormattedTextField personalityField;
+    private JFormattedTextField quirkField;
+
 
     public QuestNPCMenuForm(ApplicationContext context,
                        SessionManager sessionManager,
@@ -42,6 +43,7 @@ public class QuestNPCMenuForm extends JFrame {
         this.sessionManager=sessionManager;
         this.npcService=npcService;
         this.genericFunctions=genericFunctions;
+        buildUI();
         if (sessionManager.getSelected(Quest.class)==null) {
             this.quest = new Quest();
             this.npc=new NPC();
@@ -56,11 +58,94 @@ public class QuestNPCMenuForm extends JFrame {
 
     }
 
+    private void buildUI() {
+        Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
+        Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+
+        JPanel root = new JPanel();
+        root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+        root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setContentPane(root);
+
+        JLabel title = new JLabel("Random NPC generator");
+        title.setFont(titleFont);
+        title.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        root.add(title);
+        root.add(Box.createVerticalStrut(20));
+
+        npcField = new JFormattedTextField();
+        genderField = new JFormattedTextField();
+        ageField = new JFormattedTextField();
+        appearanceField = new JFormattedTextField();
+        personalityField = new JFormattedTextField();
+        quirkField = new JFormattedTextField();
+
+        JComponent[] fields = {
+                labeledField("NPC:", npcField, labelFont, fieldFont),
+                labeledField("Gender:", genderField, labelFont, fieldFont),
+                labeledField("Age:", ageField, labelFont, fieldFont),
+                labeledField("Appearance:", appearanceField, labelFont, fieldFont),
+                labeledField("Personality:", personalityField, labelFont, fieldFont),
+                labeledField("Quirk:", quirkField, labelFont, fieldFont)
+        };
+
+        for (JComponent c : fields) {
+            root.add(c);
+            root.add(Box.createVerticalStrut(10));
+        }
+
+        JPanel buttonRow = new JPanel();
+        buttonRow.setLayout(new GridLayout(1, 3, 10, 0));
+
+        generateButton = new JButton("Generate");
+        rerollButton = new JButton("Reroll");
+        exportButton = new JButton("Export");
+
+        generateButton.setFont(buttonFont);
+        rerollButton.setFont(buttonFont);
+        exportButton.setFont(buttonFont);
+
+        buttonRow.add(generateButton);
+        buttonRow.add(rerollButton);
+        buttonRow.add(exportButton);
+
+        root.add(Box.createVerticalStrut(10));
+        root.add(buttonRow);
+        root.add(Box.createVerticalStrut(20));
+
+        goBackButton = new JButton("Go back");
+        goBackButton.setFont(buttonFont);
+        goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        goBackButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
+        root.add(goBackButton);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(450, 650);
+        setLocationRelativeTo(null);
+    }
+
+
+    private JPanel labeledField(String text, JFormattedTextField field, Font labelFont, Font fieldFont) {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+
+        JLabel label = new JLabel(text);
+        label.setFont(labelFont);
+
+        field.setFont(fieldFont);
+        field.setPreferredSize(new Dimension(200, 28));
+
+        panel.add(label, BorderLayout.WEST);
+        panel.add(field, BorderLayout.CENTER);
+
+        return panel;
+    }
+
 
     private void initializeForm(ApplicationContext context){
-        setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,600);
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e->{
@@ -97,11 +182,11 @@ public class QuestNPCMenuForm extends JFrame {
     }
 
     public void updateFields() {
-        NPCFormattedTextField.setText(npc.getOneLiner());
-        genderFormattedTextField.setText(npc.getGender());
-        ageFormattedTextField.setText(npc.getAge());
-        appearanceFormattedTextField.setText(npc.getAppearance());
-        personalityFormattedTextField.setText(npc.getPersonality());
-        quirkFormattedTextField.setText(npc.getQuirk());
+        npcField.setText(npc.getOneLiner());
+        genderField.setText(npc.getGender());
+        ageField.setText(npc.getAge());
+        appearanceField.setText(npc.getAppearance());
+        personalityField.setText(npc.getPersonality());
+        quirkField.setText(npc.getQuirk());
     }
 }

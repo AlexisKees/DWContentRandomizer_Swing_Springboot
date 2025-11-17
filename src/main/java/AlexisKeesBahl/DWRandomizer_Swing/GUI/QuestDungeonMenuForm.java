@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.util.function.BiFunction;
 
 @Component
 @Scope("prototype")
@@ -50,7 +53,7 @@ public class QuestDungeonMenuForm extends JFrame {
         this.sessionManager=sessionManager;
         this.dungeonService=dungeonService;
         this.genericFunctions=genericFunctions;
-
+        buildUI();
         if (sessionManager.getSelected(Quest.class)==null) {
             this.quest = new Quest();
             this.dungeon=new Dungeon();
@@ -62,10 +65,182 @@ public class QuestDungeonMenuForm extends JFrame {
         }
         initializeForm(context);
     }
+    private void buildUI() {
+        // Fuentes
+        Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
+        Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+
+        // Instanciar componentes
+        nameTextField = new JFormattedTextField();
+        sizeFormattedTextField = new JFormattedTextField();
+        roomsFormattedTextField = new JFormattedTextField();
+        exitsFormattedTextField = new JFormattedTextField();
+        themesFormattedTextField = new JFormattedTextField();
+        formFormattedTextField = new JFormattedTextField();
+        situationFormattedTextField = new JFormattedTextField();
+        accessibilityFormattedTextField = new JFormattedTextField();
+        builderFormattedTextField = new JFormattedTextField();
+        functionFormattedTextField = new JFormattedTextField();
+        causeOfRuinFormattedTextField = new JFormattedTextField();
+
+        themesLabel = new JLabel("Themes:");
+        areasLabel = new JLabel("Areas:");
+
+        areasTextPane = new JTextPane();
+
+        generateButton = new JButton("Generate dungeon");
+        addAreasButton = new JButton("Add / edit areas");
+        exportButton = new JButton("Export");
+        goBackButton = new JButton("Back");
+
+        // Panel raíz
+        JPanel root = new JPanel();
+        root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+        root.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // Título
+        JLabel title = new JLabel("Random dungeon generator");
+        title.setFont(titleFont);
+        title.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        root.add(title);
+        root.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Helper: fila label + field
+        BiFunction<JLabel, JComponent, JPanel> lf = (lbl, field) -> {
+            JPanel p = new JPanel(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            c.insets = new Insets(2, 2, 2, 2);
+
+            lbl.setFont(labelFont);
+            if (field instanceof JTextComponent textComp) {
+                textComp.setFont(fieldFont);
+            } else {
+                field.setFont(fieldFont);
+            }
+
+            c.gridx = 0;
+            c.gridy = 0;
+            c.anchor = GridBagConstraints.WEST;
+            p.add(lbl, c);
+
+            c.gridx = 1;
+            c.weightx = 1;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            p.add(field, c);
+
+            return p;
+        };
+
+        // Name
+        root.add(lf.apply(new JLabel("Name:"), nameTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        // Size / Rooms / Exits
+        JPanel sizeRow = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(2, 4, 2, 4);
+
+        JLabel sizeLbl = new JLabel("Size:");
+        sizeLbl.setFont(labelFont);
+        sizeFormattedTextField.setFont(fieldFont);
+
+        c.gridx = 0;
+        c.gridy = 0;
+        sizeRow.add(sizeLbl, c);
+        c.gridx = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        sizeRow.add(sizeFormattedTextField, c);
+
+        JLabel roomsLbl = new JLabel("Rooms:");
+        roomsLbl.setFont(labelFont);
+        roomsFormattedTextField.setFont(fieldFont);
+
+        c.gridx = 2;
+        c.fill = 0;
+        sizeRow.add(roomsLbl, c);
+        c.gridx = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        sizeRow.add(roomsFormattedTextField, c);
+
+        JLabel exitsLbl = new JLabel("Exits:");
+        exitsLbl.setFont(labelFont);
+        exitsFormattedTextField.setFont(fieldFont);
+
+        c.gridx = 4;
+        c.fill = 0;
+        sizeRow.add(exitsLbl, c);
+        c.gridx = 5;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        sizeRow.add(exitsFormattedTextField, c);
+
+        root.add(sizeRow);
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        // Resto de campos simples
+        root.add(lf.apply(themesLabel, themesFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        root.add(lf.apply(new JLabel("Form:"), formFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        root.add(lf.apply(new JLabel("Situation:"), situationFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        root.add(lf.apply(new JLabel("Accessibility:"), accessibilityFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        root.add(lf.apply(new JLabel("Builder:"), builderFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        root.add(lf.apply(new JLabel("Function:"), functionFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        root.add(lf.apply(new JLabel("Cause of ruin:"), causeOfRuinFormattedTextField));
+        root.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Áreas
+        areasLabel.setFont(labelFont);
+        areasLabel.setAlignmentX(JComponent.LEFT_ALIGNMENT);
+
+        areasTextPane.setFont(fieldFont);
+        areasTextPane.setEditable(false);
+        JScrollPane areasScroll = new JScrollPane(areasTextPane);
+        areasScroll.setPreferredSize(new Dimension(350, 150));
+        areasScroll.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+
+        root.add(areasLabel);
+        root.add(Box.createRigidArea(new Dimension(0, 3)));
+        root.add(areasScroll);
+        root.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Botones principales
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+
+        JButton[] btns = {generateButton, addAreasButton, exportButton};
+        for (JButton b : btns) {
+            b.setFont(buttonFont);
+            b.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+            buttons.add(b);
+            buttons.add(Box.createRigidArea(new Dimension(10, 0)));
+        }
+
+        root.add(buttons);
+        root.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Botón Back
+        goBackButton.setFont(buttonFont);
+        goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        root.add(goBackButton);
+
+        setContentPane(root);
+        pack();
+        setLocationRelativeTo(null);
+    }
     private void initializeForm(ApplicationContext context){
-        setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450,600);
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e -> {

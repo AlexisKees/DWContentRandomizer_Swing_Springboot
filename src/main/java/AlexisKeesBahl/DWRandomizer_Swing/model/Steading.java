@@ -24,7 +24,7 @@ public class Steading implements IPWClass {
     private String raceOfBuilders = "";
     private String alignment = "";
     private String dangerLevel = "";
-    private String oneLiner;
+    private String oneLiner="";
 
     public String getOneLiner(){
         return oneLiner;

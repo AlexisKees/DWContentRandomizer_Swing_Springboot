@@ -30,7 +30,7 @@ public class Quest implements IPWClass {
     @JoinColumn(name = "quest_giver_id", nullable = false)
     private NPC questGiver;
 
-    private String oneLiner;
+    private String oneLiner="";
     private String brief;
 
 

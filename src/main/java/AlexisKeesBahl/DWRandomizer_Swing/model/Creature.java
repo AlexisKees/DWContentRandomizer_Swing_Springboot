@@ -31,7 +31,7 @@ public class Creature implements IPWClass {
     private String alignment;
     private String disposition;
     private String armorType;
-    private String oneLiner;
+    private String oneLiner="";
 
     public String getOneLiner(){
         return oneLiner;

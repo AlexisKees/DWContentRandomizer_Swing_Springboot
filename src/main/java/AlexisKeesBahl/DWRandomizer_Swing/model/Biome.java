@@ -24,7 +24,7 @@ public class Biome implements IPWClass {
     private String roads;
     private String alignment;
     private String distance;
-    private String oneLiner;
+    private String oneLiner="";
 
     @OneToOne(mappedBy = "biome", optional = true)
     private Quest quest;

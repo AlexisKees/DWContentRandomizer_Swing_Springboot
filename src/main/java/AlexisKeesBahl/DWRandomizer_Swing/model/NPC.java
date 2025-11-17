@@ -28,7 +28,7 @@ public class NPC implements IPWClass {
     private String appearance;
     private String personality;
     private String quirk;
-    private String oneLiner;
+    private String oneLiner="";
 
     @OneToOne(mappedBy = "questGiver", optional = true)
     private Quest quest;

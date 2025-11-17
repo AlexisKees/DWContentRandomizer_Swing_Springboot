@@ -50,6 +50,8 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
             follower.getAvailableTags().add(NPCArrays.FOLLOWER_TAGS[i]);
         }
         follower.setTags("");
+        follower.setQuality(0);
+        follower.setLoyalty(1);
 
         String rarity = PickFrom(CreatureArrays.SUBCATEGORIES_HUMANOID);
         switch (rarity) {
@@ -85,11 +87,13 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
         int ageRoll = (int)(Math.random()*7+3);
         follower.setAge(DetailsArrays.AGE[ageRoll]);
         follower.setOneLiner(follower.getName()+", "+follower.getGender()+" "+follower.getRace());
-        System.out.println("Follower roll OK");
         rollFollowerDetails(follower);
     }
 
     public void rollFollowerDetails(Follower follower){
+        follower.setQuality(0);
+        follower.setLoyalty(1);
+        follower.setTags("");
         follower.setQualityString(PickFrom(NPCArrays.FOLLOWER_QUALITY));
         switch (follower.getQualityString()){
             case "A liability: Quality -1, +0 tags" -> follower.setQuality(follower.getQuality()-1);

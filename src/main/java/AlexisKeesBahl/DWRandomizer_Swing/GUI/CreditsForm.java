@@ -5,32 +5,84 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 
 @Component
 @Scope("prototype")
 public class CreditsForm extends JFrame {
-    private final ApplicationContext context;
-    private JButton goBackButton;
-    private JEditorPane creditsEditorPane;
-    private JScrollPane mainPane;
-    private JPanel InnerPane;
 
-    public CreditsForm(ApplicationContext context){
-        this.context=context;
-        initializeForm();
+    private final ApplicationContext context;
+
+    private JEditorPane creditsEditorPane;
+    private JButton goBackButton;
+
+    public CreditsForm(ApplicationContext context) {
+        this.context = context;
+
+        buildUI();
+        initializeListeners();
     }
 
-    private void initializeForm(){
-        setContentPane(mainPane);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(550,550);
-        setLocationRelativeTo(null);
+    private void buildUI() {
+        Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
+        Font textFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
 
-        creditsEditorPane.setText("""
-                Created by Alexis Kees Bahl. November of 2025.
-                Based on "The Perilous Wilds, revised edition".
+        JPanel main = new JPanel(new BorderLayout());
+        main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // ---------- TITLE ----------
+        JLabel title = new JLabel("Credits");
+        title.setFont(titleFont);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel top = new JPanel(new BorderLayout());
+        top.add(title, BorderLayout.CENTER);
+        top.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
+
+        // ---------- EDITOR WITH SCROLL ----------
+        creditsEditorPane = new JEditorPane();
+        creditsEditorPane.setEditable(false);
+        creditsEditorPane.setFont(textFont);
+        creditsEditorPane.setText(loadCreditsText());
+
+        JScrollPane scroll = new JScrollPane(creditsEditorPane);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+
+        // Make scroll area stretch vertically with a center panel
+        JPanel center = new JPanel(new BorderLayout());
+        center.add(scroll, BorderLayout.CENTER);
+
+        // ---------- BUTTON ----------
+        goBackButton = new JButton("Go back");
+        goBackButton.setFont(buttonFont);
+
+        JPanel bottom = new JPanel(new BorderLayout());
+        bottom.add(goBackButton, BorderLayout.CENTER);
+        bottom.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
+
+        // Add everything to main panel
+        main.add(top, BorderLayout.NORTH);
+        main.add(center, BorderLayout.CENTER);
+        main.add(bottom, BorderLayout.SOUTH);
+
+        setContentPane(main);
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+    }
+
+    private String loadCreditsText() {
+        return """
+                DW Randomizer — Swing Edition
+
+                Developed by: AlexisKeesBahl
+                Based on Dungeon World and The Perilous Wilds
+                All rights reserved by their respective creators.
+
+                Special thanks:
+                - The Dungeon World community
+                - Playtesters and friends
+                - Inspiration from PbtA ecosystem
                 
                 DISCLAIMER:
                 This app is a personal project. It was made
@@ -52,18 +104,16 @@ public class CreditsForm extends JFrame {
                 
                 Be free to make your contributions to my public repository at:
                 https://github.com/AlexisKees/DWContentRandomizer_Swing_Springboot.git
-                
-                Thanks to all who make de DW community.
-                """);
 
-        goBackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainMenuForm mainMenuForm = context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
-                dispose();
-            }
-        });
+                """;
     }
 
+    private void initializeListeners() {
+        goBackButton.addActionListener(e -> {
+            MainMenuForm main = context.getBean(MainMenuForm.class);
+            main.setVisible(true);
+            dispose();
+        });
+    }
 }
+

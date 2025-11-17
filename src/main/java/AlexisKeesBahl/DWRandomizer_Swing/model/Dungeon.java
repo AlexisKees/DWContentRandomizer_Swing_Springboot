@@ -37,7 +37,7 @@ public class Dungeon implements IPWClass {
 
     @OneToMany(mappedBy = "dungeon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Area> areas = new ArrayList<>();
-    private String oneLiner;
+    private String oneLiner="";
 
     @Override
     public String getOneLiner(){

@@ -9,93 +9,173 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 
 @Component
 @Scope("prototype")
-public class SteadingMenuForm extends JFrame{
+public class SteadingMenuForm extends JFrame {
+
     private final ApplicationContext context;
     private final SessionManager sessionManager;
     private final SteadingService steadingService;
     private final GenericFunctions genericFunctions;
+
     private Steading steading;
-    private JButton goBackButton;
-    private JPanel panel1;
+
+    private JFormattedTextField steadingField;
+    private JFormattedTextField tagsField;
+    private JFormattedTextField alignmentField;
+    private JFormattedTextField dangerField;
+    private JFormattedTextField featureField;
+    private JFormattedTextField problemField;
+
     private JButton generateButton;
     private JButton rerollButton;
     private JButton exportButton;
-    private JFormattedTextField steadingFormattedTextField;
-    private JFormattedTextField alignmentFormattedTextField;
-    private JFormattedTextField dangerLevelFormattedTextField;
-    private JFormattedTextField tagsFormattedTextField;
-    private JFormattedTextField featureFormattedTextField;
-    private JFormattedTextField problemFormattedTextField;
+    private JButton goBackButton;
 
-    public SteadingMenuForm(ApplicationContext context,
-    SessionManager sessionManager,
-    SteadingService steadingService,
-    GenericFunctions genericFunctions) {
-        this.context=context;
-        this.sessionManager=sessionManager;
-        this.steadingService=steadingService;
-        this.genericFunctions=genericFunctions;
-        if(sessionManager.getSelected(Steading.class)==null)
-            this.steading= new Steading();
-        else {
+    public SteadingMenuForm(
+            ApplicationContext context,
+            SessionManager sessionManager,
+            SteadingService steadingService,
+            GenericFunctions genericFunctions
+    ) {
+        this.context = context;
+        this.sessionManager = sessionManager;
+        this.steadingService = steadingService;
+        this.genericFunctions = genericFunctions;
+
+        if (sessionManager.getSelected(Steading.class) == null)
+            this.steading = new Steading();
+        else
             this.steading = sessionManager.getSelected(Steading.class);
-            updateFields();
+
+        buildUI();
+        initializeLogic();
+        updateFields();
+    }
+
+
+    private void buildUI() {
+        Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
+        Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+
+        JPanel root = new JPanel();
+        root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+        root.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setContentPane(root);
+
+        JLabel title = new JLabel("Random steading generator");
+        title.setFont(titleFont);
+        title.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        root.add(title);
+        root.add(Box.createVerticalStrut(20));
+
+        steadingField = new JFormattedTextField();
+        tagsField = new JFormattedTextField();
+        alignmentField = new JFormattedTextField();
+        dangerField = new JFormattedTextField();
+        featureField = new JFormattedTextField();
+        problemField = new JFormattedTextField();
+
+        JComponent[] fields = {
+                labeledField("Steading:", steadingField, labelFont, fieldFont),
+                labeledField("Tags:", tagsField, labelFont, fieldFont),
+                labeledField("Alignment:", alignmentField, labelFont, fieldFont),
+                labeledField("Danger level:", dangerField, labelFont, fieldFont),
+                labeledField("Feature:", featureField, labelFont, fieldFont),
+                labeledField("Problem:", problemField, labelFont, fieldFont)
+        };
+
+        for (JComponent c : fields) {
+            root.add(c);
+            root.add(Box.createVerticalStrut(10));
         }
 
-        initializeForm(context);
-    }
-    private void initializeForm(ApplicationContext context){
-        setContentPane(panel1);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,600);
-        setLocationRelativeTo(null);
+        JPanel buttonRow = new JPanel(new GridLayout(1, 3, 10, 0));
 
+        generateButton = new JButton("Generate");
+        rerollButton = new JButton("Reroll");
+        exportButton = new JButton("Export");
+
+        JButton[] br = { generateButton, rerollButton, exportButton };
+
+        for (JButton b : br) {
+            b.setFont(buttonFont);
+            buttonRow.add(b);
+        }
+
+        root.add(Box.createVerticalStrut(10));
+        root.add(buttonRow);
+        root.add(Box.createVerticalStrut(20));
+
+        goBackButton = new JButton("Go back");
+        goBackButton.setFont(buttonFont);
+        goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        goBackButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
+        root.add(goBackButton);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(450, 650);
+        setLocationRelativeTo(null);
+    }
+
+
+    private JPanel labeledField(String text, JFormattedTextField field, Font labelFont, Font fieldFont) {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JLabel label = new JLabel(text);
+        label.setFont(labelFont);
+        field.setFont(fieldFont);
+        field.setPreferredSize(new Dimension(200, 28));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(field, BorderLayout.CENTER);
+        return panel;
+    }
+
+
+    private void initializeLogic() {
         generateButton.addActionListener(e -> {
             steadingService.rollSteading(steading);
-            sessionManager.add(Steading.class,steading);
+            sessionManager.add(Steading.class, steading);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
-            if (sessionManager.getSelected(Steading.class)==null)
+            if (sessionManager.getSelected(Steading.class) == null)
                 steadingService.rollSteading(steading);
             else
                 steadingService.rollDetails(steading);
 
-            sessionManager.add(Steading.class,steading);
+            sessionManager.add(Steading.class, steading);
             updateFields();
         });
 
-        exportButton.addActionListener(e ->{
+        exportButton.addActionListener(e -> {
             try {
                 genericFunctions.exportPW(steading);
-                JOptionPane.showMessageDialog(this,"Check your files!");
-            } catch (Exception ex){
+                JOptionPane.showMessageDialog(this, "Check your files!");
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export steading...");
             }
         });
 
-        goBackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainMenuForm mainMenuForm = context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
-                dispose();
-            }
+        goBackButton.addActionListener(e -> {
+            MainMenuForm m = context.getBean(MainMenuForm.class);
+            m.setVisible(true);
+            dispose();
         });
     }
 
+
     private void updateFields() {
-        steadingFormattedTextField.setText(String.format("%s, %s %s", steading.getName(), steading.getRaceOfBuilders(), steading.getSize()));
-        alignmentFormattedTextField.setText(steading.getAlignment());
-        dangerLevelFormattedTextField.setText(steading.getDangerLevel());
-        tagsFormattedTextField.setText(steading.getTags());
-        featureFormattedTextField.setText(steading.getFeature());
-        problemFormattedTextField.setText(steading.getProblem());
+        steadingField.setText(String.format("%s, %s %s", steading.getName(), steading.getRaceOfBuilders(), steading.getSize()));
+        tagsField.setText(steading.getTags());
+        alignmentField.setText(steading.getAlignment());
+        dangerField.setText(steading.getDangerLevel());
+        featureField.setText(steading.getFeature());
+        problemField.setText(steading.getProblem());
     }
 }

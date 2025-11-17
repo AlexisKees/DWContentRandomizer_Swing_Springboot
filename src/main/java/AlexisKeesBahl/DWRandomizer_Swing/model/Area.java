@@ -23,7 +23,7 @@ public class Area implements IPWClass {
     private String areaDressing;
     private int discoveriesAmount;
     private int dangersAmount;
-    private String oneLiner;
+    private String oneLiner="";
 
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<AreaDiscovery> discoveries = new ArrayList<>();

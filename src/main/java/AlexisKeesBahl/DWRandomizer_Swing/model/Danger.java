@@ -22,7 +22,7 @@ public class Danger implements IPWClass {
     @Transient private String[] promptTable;
     private String prompt;
     private String finalResult;
-    private String oneLiner;
+    private String oneLiner="";
 
     public String getOneLiner(){
         return oneLiner;

@@ -9,96 +9,214 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 
 @Component
 @Scope("prototype")
 public class DangerMenuForm extends JFrame {
-    private final ApplicationContext context;
-    private final SessionManager sessionManager;
+
     private final DangerService dangerService;
     private final GenericFunctions genericFunctions;
+    private final SessionManager sessionManager;
+    private final ApplicationContext context;
+
     private Danger danger;
-    private JButton goBackButton;
-    private JPanel panel1;
+
+    private JTextField categoryField;
+    private JTextField subcategoryField;
+    private JTextPane dangerPane;
+
     private JButton generateButton;
-    private JButton rerollscButton;
-    private JTextField categoryTextField;
-    private JTextField subcategoryTextField;
-    private JTextPane dangerTextPane;
+    private JButton rerollSCButton;
     private JButton rerollDangerButton;
     private JButton exportButton;
+    private JButton backButton;
 
     public DangerMenuForm(SessionManager sessionManager,
-    DangerService dangerService,
-    GenericFunctions genericFunctions,
-    ApplicationContext context) {
-        this.sessionManager=sessionManager;
-        this.context=context;
+                          DangerService dangerService,
+                          GenericFunctions genericFunctions,
+                          ApplicationContext context) {
+
         this.dangerService = dangerService;
         this.genericFunctions = genericFunctions;
-        if (sessionManager.getSelected(Danger.class)==null)
-            this.danger = new Danger();
-        else {
-            this.danger = sessionManager.getSelected(Danger.class);
-            updateFields();
-        }
-        initializeForm(context); 
-        }
+        this.sessionManager = sessionManager;
+        this.context = context;
 
-    private void initializeForm(ApplicationContext context){
-        setContentPane(panel1);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,600);
+        this.danger = sessionManager.getSelected(Danger.class) != null
+                ? sessionManager.getSelected(Danger.class)
+                : new Danger();
+
+        buildUI();
+        updateFields();
+        initializeListeners();
+    }
+
+    // ---------------------------------------------------------
+    // UI
+    // ---------------------------------------------------------
+    private void buildUI() {
+
+        Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
+        Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+
+        JPanel main = new JPanel(new BorderLayout());
+        main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // ---------- TITLE ----------
+        JLabel title = new JLabel("Random danger generator");
+        title.setFont(titleFont);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel top = new JPanel(new BorderLayout());
+        top.add(title, BorderLayout.CENTER);
+        top.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
+
+        main.add(top, BorderLayout.NORTH);
+
+        // ---------- CENTER ----------
+        JPanel center = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(4, 0, 4, 0);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.weightx = 1;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        // Campos
+        categoryField = addField(center, gbc, "Category:", labelFont, fieldFont);
+        subcategoryField = addField(center, gbc, "Subcategory:", labelFont, fieldFont);
+
+        // ---------- DANGER TEXTPANE ----------
+        JLabel lblDanger = new JLabel("Danger:");
+        lblDanger.setFont(labelFont);
+        center.add(lblDanger, gbc);
+
+        gbc.gridy++;
+
+        dangerPane = new JTextPane();
+        dangerPane.setFont(fieldFont);
+        dangerPane.setEditable(false);
+
+        JScrollPane scroll = new JScrollPane(dangerPane);
+        scroll.setPreferredSize(new Dimension(300, 200));
+        center.add(scroll, gbc);
+
+        gbc.gridy++;
+
+        gbc.weighty = 1;
+        center.add(Box.createVerticalGlue(), gbc);
+
+        main.add(center, BorderLayout.CENTER);
+
+        // ---------- BOTTOM BUTTONS ----------
+        JPanel bottom = new JPanel();
+        bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
+
+        JPanel row1 = new JPanel(new GridLayout(1, 2, 10, 0));
+        generateButton = styledButton("Generate", buttonFont);
+        rerollSCButton = styledButton("Reroll SC", buttonFont);
+        row1.add(generateButton);
+        row1.add(rerollSCButton);
+
+        JPanel row2 = new JPanel(new GridLayout(1, 2, 10, 0));
+        rerollDangerButton = styledButton("Reroll danger", buttonFont);
+        exportButton = styledButton("Export", buttonFont);
+        row2.add(rerollDangerButton);
+        row2.add(exportButton);
+
+        bottom.add(row1);
+        bottom.add(Box.createVerticalStrut(8));
+        bottom.add(row2);
+        bottom.add(Box.createVerticalStrut(10));
+
+        backButton = styledButton("Go back", buttonFont);
+        JPanel backRow = new JPanel(new BorderLayout());
+        backRow.add(backButton, BorderLayout.CENTER);
+
+        bottom.add(backRow);
+
+        main.add(bottom, BorderLayout.SOUTH);
+
+        setContentPane(main);
+        pack();
         setLocationRelativeTo(null);
+    }
+
+    private JTextField addField(JPanel parent, GridBagConstraints gbc,
+                                String title, Font labelFont, Font fieldFont) {
+
+        JLabel lbl = new JLabel(title);
+        lbl.setFont(labelFont);
+        parent.add(lbl, gbc);
+
+        gbc.gridy++;
+
+        JTextField txt = new JTextField();
+        txt.setFont(fieldFont);
+        txt.setEditable(false);
+
+        parent.add(txt, gbc);
+
+        gbc.gridy++;
+
+        return txt;
+    }
+
+    private JButton styledButton(String text, Font font) {
+        JButton b = new JButton(text);
+        b.setFont(font);
+        return b;
+    }
+
+    // ---------------------------------------------------------
+    // Listeners
+    // ---------------------------------------------------------
+    private void initializeListeners() {
 
         generateButton.addActionListener(e -> {
             dangerService.rollDanger(danger);
-            sessionManager.add(Danger.class,danger);
+            sessionManager.add(Danger.class, danger);
             updateFields();
         });
 
-        rerollscButton.addActionListener(e ->{
-            if(sessionManager.getSelected(Danger.class)==null)
-                dangerService.rollDanger(danger);
-            else dangerService.rollSubcategory(danger);
-
-            sessionManager.add(Danger.class,danger);
+        rerollSCButton.addActionListener(e -> {
+            dangerService.rollSubcategory(danger);
+            sessionManager.add(Danger.class, danger);
             updateFields();
         });
 
-        rerollDangerButton.addActionListener(e ->{
-            if(sessionManager.getSelected(Danger.class)==null)
-                dangerService.rollDanger(danger);
-            else dangerService.rollPrompt(danger);
-
-            sessionManager.add(Danger.class,danger);
+        rerollDangerButton.addActionListener(e -> {
+            dangerService.rollPrompt(danger);
+            sessionManager.add(Danger.class, danger);
             updateFields();
         });
 
-        exportButton.addActionListener(e->{
-            try{
+        exportButton.addActionListener(e -> {
+            try {
                 genericFunctions.exportPW(danger);
-                JOptionPane.showMessageDialog(this,"Check your files!");
-            }catch (Exception ex){
-                JOptionPane.showMessageDialog(this, "Couldn't export danger...");
+                JOptionPane.showMessageDialog(this, "Check your files!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Couldn't export...");
             }
         });
 
-        goBackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainMenuForm mainMenuForm =context.getBean(MainMenuForm.class);
-                mainMenuForm.setVisible(true);
-                dispose();
-            }
+        backButton.addActionListener(e -> {
+            MainMenuForm mainMenu = context.getBean(MainMenuForm.class);
+            mainMenu.setVisible(true);
+            dispose();
         });
     }
 
+    // ---------------------------------------------------------
+    // Update UI
+    // ---------------------------------------------------------
     private void updateFields() {
-        categoryTextField.setText(danger.getCategory());
-        subcategoryTextField.setText(danger.getSubcategory());
-        dangerTextPane.setText(danger.getFinalResult());
+        categoryField.setText(danger.getCategory());
+        subcategoryField.setText(danger.getSubcategory());
+        dangerPane.setText(danger.getFinalResult());
     }
 }
