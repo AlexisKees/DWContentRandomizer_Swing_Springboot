@@ -1,9 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
-import AlexisKeesBahl.DWRandomizer_Swing.model.Biome;
-import AlexisKeesBahl.DWRandomizer_Swing.model.Dungeon;
-import AlexisKeesBahl.DWRandomizer_Swing.model.NPC;
-import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
+import AlexisKeesBahl.DWRandomizer_Swing.model.*;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.QuestService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.util.SessionManager;
@@ -39,6 +36,8 @@ public class QuestMenuForm extends JFrame {
     private JButton viewQuestGiverButton;
     private JButton exportButton;
     private JButton goBackButton;
+    private JButton leftButton;
+    private JButton rightButton;
 
     public QuestMenuForm(
             ApplicationContext context,
@@ -69,6 +68,8 @@ public class QuestMenuForm extends JFrame {
 
 
     private void buildUI() {
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
@@ -135,6 +136,17 @@ public class QuestMenuForm extends JFrame {
         root.add(Box.createVerticalStrut(10));
         root.add(row2);
         root.add(Box.createVerticalStrut(20));
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        root.add(arrowsPanel);
+        root.add(Box.createVerticalStrut(8));
+
 
         goBackButton = new JButton("Go back");
         goBackButton.setFont(buttonFont);
@@ -172,6 +184,7 @@ public class QuestMenuForm extends JFrame {
     private void initializeLogic() {
 
         generateButton.addActionListener(e -> {
+            quest=quest.clone();
             questService.rollQuest(quest);
             sessionManager.add(Quest.class, quest);
             updateFields();
@@ -204,6 +217,23 @@ public class QuestMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export quest...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Quest.class).indexOf(quest)>0){
+                int currentIndex = sessionManager.getList(Quest.class).indexOf(quest);
+                int newIndex=currentIndex-1;
+                quest = sessionManager.getList(Quest.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Quest.class).indexOf(quest)<sessionManager.getList(Quest.class).size()-1) {
+                int currentIndex = sessionManager.getList(Quest.class).indexOf(quest);
+                int newIndex = currentIndex + 1;
+                this.quest = sessionManager.getList(Quest.class).get(newIndex);
+                updateFields();
             }
         });
 

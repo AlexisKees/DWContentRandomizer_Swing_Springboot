@@ -22,8 +22,9 @@ public class QuestBiomeMenuForm extends JFrame {
     private final ApplicationContext context;
     private Biome biome;
     private Quest quest;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton backButton;
-    private JPanel panel1;
     private JFormattedTextField biomeFormattedTextField;
     private JFormattedTextField weatherFormattedTextField;
     private JFormattedTextField weatherIntensityFormattedTextField;
@@ -80,6 +81,9 @@ public class QuestBiomeMenuForm extends JFrame {
     }
 
     private void buildUI() {
+
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
@@ -143,6 +147,18 @@ public class QuestBiomeMenuForm extends JFrame {
         bottom.add(row);
         bottom.add(Box.createVerticalStrut(8));
 
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
+
+
         backButton = new JButton("Go back");
         backButton.setFont(buttonFont);
 
@@ -163,21 +179,23 @@ public class QuestBiomeMenuForm extends JFrame {
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e -> {
+            biome=biome.clone();
             biomeService.rollBiome(biome);
+            sessionManager.add(Biome.class,biome);
             quest.setBiome(biome);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
+            biome=biome.clone();
             if(sessionManager.getSelected(Biome.class)==null){
                 biomeService.rollBiome(biome);
-                quest.setBiome(biome);
-                updateFields();
             } else {
                 biomeService.reRollDetails(biome);
-                quest.setBiome(biome);
-                updateFields();
             }
+            sessionManager.add(Biome.class,biome);
+            quest.setBiome(biome);
+            updateFields();
         });
 
         exportButton.addActionListener(e -> {
@@ -186,6 +204,23 @@ public class QuestBiomeMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this,"Check your files!");
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(this, "Couldn't export file...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Biome.class).indexOf(biome)>0){
+                int currentIndex = sessionManager.getList(Biome.class).indexOf(biome);
+                int newIndex=currentIndex-1;
+                biome = sessionManager.getList(Biome.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Biome.class).indexOf(biome)<sessionManager.getList(Biome.class).size()-1) {
+                int currentIndex = sessionManager.getList(Biome.class).indexOf(biome);
+                int newIndex = currentIndex + 1;
+                this.biome = sessionManager.getList(Biome.class).get(newIndex);
+                updateFields();
             }
         });
 

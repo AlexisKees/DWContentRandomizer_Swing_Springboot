@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Danger;
 import AlexisKeesBahl.DWRandomizer_Swing.service.DangerService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
@@ -30,6 +31,8 @@ public class DangerMenuForm extends JFrame {
     private JButton rerollSCButton;
     private JButton rerollDangerButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton backButton;
 
     public DangerMenuForm(SessionManager sessionManager,
@@ -57,6 +60,8 @@ public class DangerMenuForm extends JFrame {
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -125,6 +130,16 @@ public class DangerMenuForm extends JFrame {
         bottom.add(Box.createVerticalStrut(8));
         bottom.add(row2);
         bottom.add(Box.createVerticalStrut(10));
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
 
         backButton = styledButton("Go back", buttonFont);
         JPanel backRow = new JPanel(new BorderLayout());
@@ -168,19 +183,28 @@ public class DangerMenuForm extends JFrame {
     private void initializeListeners() {
 
         generateButton.addActionListener(e -> {
+            danger=danger.clone();
             dangerService.rollDanger(danger);
             sessionManager.add(Danger.class, danger);
             updateFields();
         });
 
         rerollSCButton.addActionListener(e -> {
-            dangerService.rollSubcategory(danger);
+            danger=danger.clone();
+            if(sessionManager.getSelected(Danger.class)==null)
+                dangerService.rollDanger(danger);
+            else
+                dangerService.rollSubcategory(danger);
             sessionManager.add(Danger.class, danger);
             updateFields();
         });
 
         rerollDangerButton.addActionListener(e -> {
-            dangerService.rollPrompt(danger);
+            danger=danger.clone();
+            if(sessionManager.getSelected(Danger.class)==null)
+                dangerService.rollDanger(danger);
+            else
+                dangerService.rollPrompt(danger);
             sessionManager.add(Danger.class, danger);
             updateFields();
         });
@@ -191,6 +215,23 @@ public class DangerMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Danger.class).indexOf(danger)>0){
+                int currentIndex = sessionManager.getList(Danger.class).indexOf(danger);
+                int newIndex=currentIndex-1;
+                danger = sessionManager.getList(Danger.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Danger.class).indexOf(danger)<sessionManager.getList(Danger.class).size()-1) {
+                int currentIndex = sessionManager.getList(Danger.class).indexOf(danger);
+                int newIndex = currentIndex + 1;
+                this.danger = sessionManager.getList(Danger.class).get(newIndex);
+                updateFields();
             }
         });
 

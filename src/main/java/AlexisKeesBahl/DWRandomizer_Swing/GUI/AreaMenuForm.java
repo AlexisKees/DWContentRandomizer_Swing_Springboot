@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -31,6 +32,8 @@ public class AreaMenuForm extends JFrame {
     private JButton generateButton;
     private JButton rerollButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
 
     private Area area;
@@ -59,17 +62,14 @@ public class AreaMenuForm extends JFrame {
 
 
     private void buildUI() {
-        // Fuentes
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
         Font textFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
 
-        // Panel principal con padding
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ----- Título -----
         JLabel titleLabel = new JLabel("Random area generator");
         titleLabel.setFont(titleFont);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -80,7 +80,6 @@ public class AreaMenuForm extends JFrame {
 
         main.add(titlePanel, BorderLayout.NORTH);
 
-        // ----- Panel central con campos -----
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 0, 4, 0);
@@ -90,7 +89,6 @@ public class AreaMenuForm extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Area
         JLabel areaLabel = new JLabel("Area:");
         areaLabel.setFont(labelFont);
         center.add(areaLabel, gbc);
@@ -101,7 +99,6 @@ public class AreaMenuForm extends JFrame {
         areaFormattedTextField.setEditable(false);
         center.add(areaFormattedTextField, gbc);
 
-        // Dressing
         gbc.gridy++;
         JLabel dressingLabel = new JLabel("Dressing:");
         dressingLabel.setFont(labelFont);
@@ -115,7 +112,6 @@ public class AreaMenuForm extends JFrame {
         dressingScroll.setPreferredSize(new Dimension(0, 40));
         center.add(dressingScroll, gbc);
 
-        // Rarity
         gbc.gridy++;
         JLabel rarityLabel = new JLabel("Rarity:");
         rarityLabel.setFont(labelFont);
@@ -129,7 +125,6 @@ public class AreaMenuForm extends JFrame {
         rarityScroll.setPreferredSize(new Dimension(0, 40));
         center.add(rarityScroll, gbc);
 
-        // Discoveries
         gbc.gridy++;
         discoveriesLabel = new JLabel("Discoveries:");
         discoveriesLabel.setFont(labelFont);
@@ -143,7 +138,6 @@ public class AreaMenuForm extends JFrame {
         discoveriesScroll.setPreferredSize(new Dimension(0, 100));
         center.add(discoveriesScroll, gbc);
 
-        // Dangers
         gbc.gridy++;
         dangersLabel = new JLabel("Dangers:");
         dangersLabel.setFont(labelFont);
@@ -157,14 +151,12 @@ public class AreaMenuForm extends JFrame {
         dangersScroll.setPreferredSize(new Dimension(0, 100));
         center.add(dangersScroll, gbc);
 
-        // un poco de espacio al final
         gbc.gridy++;
         gbc.weighty = 1.0;
         center.add(Box.createVerticalGlue(), gbc);
 
         main.add(center, BorderLayout.CENTER);
 
-        // ----- Panel inferior con botones -----
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 
@@ -173,6 +165,8 @@ public class AreaMenuForm extends JFrame {
         generateButton = new JButton("Generate");
         rerollButton = new JButton("Reroll");
         exportButton = new JButton("Export");
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
         goBackButton = new JButton("Go back");
 
         generateButton.setFont(buttonFont);
@@ -180,7 +174,6 @@ public class AreaMenuForm extends JFrame {
         exportButton.setFont(buttonFont);
         goBackButton.setFont(buttonFont);
 
-        // “Horizontal fill” para todos los botones
         buttonsRow.add(generateButton);
         buttonsRow.add(rerollButton);
         buttonsRow.add(exportButton);
@@ -188,16 +181,26 @@ public class AreaMenuForm extends JFrame {
         bottom.add(buttonsRow);
         bottom.add(Box.createVerticalStrut(8));
 
-        // Back ocupa todo el ancho
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
+
+
         JPanel backPanel = new JPanel(new BorderLayout());
         backPanel.add(goBackButton, BorderLayout.CENTER);
         bottom.add(backPanel);
 
         main.add(bottom, BorderLayout.SOUTH);
 
-        // Configurar frame
         setContentPane(main);
-        pack();                    // se adapta al contenido + padding
+        pack();
         setLocationRelativeTo(null);
     }
 
@@ -205,14 +208,16 @@ public class AreaMenuForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         generateButton.addActionListener(e -> {
+            area=area.clone();
             areaService.rollArea(area);
-            sessionManager.add(Area.class, area.clone());
+            sessionManager.add(Area.class, area);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
+            area=area.clone();
             areaService.rollAreaDetails(area);
-            sessionManager.add(Area.class, area.clone());
+            sessionManager.add(Area.class, area);
             updateFields();
         });
 
@@ -222,6 +227,27 @@ public class AreaMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 dispose();
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Area.class).indexOf(area)>0){
+            int currentIndex = sessionManager.getList(Area.class).indexOf(area);
+                System.out.println("current index: "+currentIndex);
+            int newIndex=currentIndex-1;
+                System.out.println("new index: "+newIndex);
+            area = sessionManager.getList(Area.class).get(newIndex);
+            updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Area.class).indexOf(area)<sessionManager.getList(Area.class).size()-1) {
+                int currentIndex = sessionManager.getList(Area.class).indexOf(area);
+                System.out.println("current index: "+currentIndex);
+                int newIndex = currentIndex + 1;
+                System.out.println("new index: "+newIndex);
+                area = sessionManager.getList(Area.class).get(newIndex);
+                updateFields();
             }
         });
 

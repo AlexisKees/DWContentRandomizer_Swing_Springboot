@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+
 import AlexisKeesBahl.DWRandomizer_Swing.model.Creature;
 import AlexisKeesBahl.DWRandomizer_Swing.service.CreatureService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
@@ -39,6 +40,8 @@ public class CreatureMenuForm extends JFrame {
     private JButton rerollSpeciesButton;
     private JButton rerollStatsButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton backButton;
 
     public CreatureMenuForm(CreatureService creatureService,
@@ -66,6 +69,8 @@ public class CreatureMenuForm extends JFrame {
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -132,6 +137,17 @@ public class CreatureMenuForm extends JFrame {
         bottom.add(Box.createVerticalStrut(8));
         bottom.add(row2);
         bottom.add(Box.createVerticalStrut(10));
+
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
 
         backButton = styledButton("Go back", buttonFont);
 
@@ -205,23 +221,40 @@ public class CreatureMenuForm extends JFrame {
     private void initializeListeners() {
 
         generateButton.addActionListener(e -> {
+            creature=creature.clone();
             creatureService.rollAttributes(creature);
             sessionManager.add(Creature.class, creature);
             updateFields();
         });
 
         rerollSubButton.addActionListener(e -> {
-            creatureService.reRollSubcategory(creature);
+            creature=creature.clone();
+            if (sessionManager.getSelected(Creature.class)==null)
+                creatureService.rollAttributes(creature);
+            else
+                creatureService.reRollSubcategory(creature);
+
+            sessionManager.add(Creature.class, creature);
             updateFields();
         });
 
         rerollSpeciesButton.addActionListener(e -> {
-            creatureService.reRollPrompt(creature);
+            creature=creature.clone();
+            if (sessionManager.getSelected(Creature.class)==null)
+                creatureService.rollAttributes(creature);
+            else
+                creatureService.reRollPrompt(creature);
+            sessionManager.add(Creature.class, creature);
             updateFields();
         });
 
         rerollStatsButton.addActionListener(e -> {
-            creatureService.rollStats(creature);
+            creature=creature.clone();
+            if (sessionManager.getSelected(Creature.class)==null)
+                creatureService.rollAttributes(creature);
+            else
+                creatureService.rollStats(creature);
+            sessionManager.add(Creature.class, creature);
             updateFields();
         });
 
@@ -231,6 +264,23 @@ public class CreatureMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export file...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Creature.class).indexOf(creature)>0){
+                int currentIndex = sessionManager.getList(Creature.class).indexOf(creature);
+                int newIndex=currentIndex-1;
+                creature = sessionManager.getList(Creature.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Creature.class).indexOf(creature)<sessionManager.getList(Creature.class).size()-1) {
+                int currentIndex = sessionManager.getList(Creature.class).indexOf(creature);
+                int newIndex = currentIndex + 1;
+                this.creature = sessionManager.getList(Creature.class).get(newIndex);
+                updateFields();
             }
         });
 

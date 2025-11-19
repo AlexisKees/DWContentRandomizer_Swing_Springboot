@@ -25,6 +25,8 @@ public class DungeonAreaForm extends JFrame{
     private JButton generateButton;
     private JButton rerollButton;
     private JButton addButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
     private JFormattedTextField areaFormattedTextField;
     private JTextPane dressingTextPane;
@@ -73,15 +75,20 @@ public class DungeonAreaForm extends JFrame{
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e ->{
+            area=area.clone();
             areaService.rollArea(area);
-            sessionManager.add(Area.class,area.clone());
+            sessionManager.add(Area.class,area);
             updateFields();
         });
 
 
         rerollButton.addActionListener(e -> {
-            areaService.rollAreaDetails(area);
-            sessionManager.add(Area.class,area.clone());
+            area=area.clone();
+            if(sessionManager.getSelected(Area.class)==null)
+                areaService.rollArea(area);
+            else
+                areaService.rollAreaDetails(area);
+            sessionManager.add(Area.class,area);
             updateFields();
         });
 
@@ -94,6 +101,23 @@ public class DungeonAreaForm extends JFrame{
             if(dungeon.getAreas().size()<dungeon.getRooms()-1)
                 dungeon.addArea(area);
             else JOptionPane.showMessageDialog(this, "All areas set.");
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Area.class).indexOf(area)>0){
+                int currentIndex = sessionManager.getList(Area.class).indexOf(area);
+                int newIndex=currentIndex-1;
+                area = sessionManager.getList(Area.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Area.class).indexOf(area)<sessionManager.getList(Area.class).size()-1) {
+                int currentIndex = sessionManager.getList(Area.class).indexOf(area);
+                int newIndex = currentIndex + 1;
+                this.area = sessionManager.getList(Area.class).get(newIndex);
+                updateFields();
+            }
         });
 
 
@@ -121,17 +145,16 @@ public class DungeonAreaForm extends JFrame{
     }
 
     private void buildUI() {
-        // Fuentes
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
         Font textFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
-        // Panel principal con padding
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ----- Título -----
         JLabel titleLabel = new JLabel("Random area generator");
         titleLabel.setFont(titleFont);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -142,7 +165,6 @@ public class DungeonAreaForm extends JFrame{
 
         main.add(titlePanel, BorderLayout.NORTH);
 
-        // ----- Panel central con campos -----
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 0, 4, 0);
@@ -152,7 +174,6 @@ public class DungeonAreaForm extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Area
         JLabel areaLabel = new JLabel("Area:");
         areaLabel.setFont(labelFont);
         center.add(areaLabel, gbc);
@@ -163,7 +184,6 @@ public class DungeonAreaForm extends JFrame{
         areaFormattedTextField.setEditable(false);
         center.add(areaFormattedTextField, gbc);
 
-        // Dressing
         gbc.gridy++;
         JLabel dressingLabel = new JLabel("Dressing:");
         dressingLabel.setFont(labelFont);
@@ -177,7 +197,6 @@ public class DungeonAreaForm extends JFrame{
         dressingScroll.setPreferredSize(new Dimension(0, 40));
         center.add(dressingScroll, gbc);
 
-        // Rarity
         gbc.gridy++;
         JLabel rarityLabel = new JLabel("Rarity:");
         rarityLabel.setFont(labelFont);
@@ -191,7 +210,6 @@ public class DungeonAreaForm extends JFrame{
         rarityScroll.setPreferredSize(new Dimension(0, 40));
         center.add(rarityScroll, gbc);
 
-        // Discoveries
         gbc.gridy++;
         discoveriesLabel = new JLabel("Discoveries:");
         discoveriesLabel.setFont(labelFont);
@@ -205,7 +223,6 @@ public class DungeonAreaForm extends JFrame{
         discoveriesScroll.setPreferredSize(new Dimension(0, 100));
         center.add(discoveriesScroll, gbc);
 
-        // Dangers
         gbc.gridy++;
         dangersLabel = new JLabel("Dangers:");
         dangersLabel.setFont(labelFont);
@@ -219,14 +236,12 @@ public class DungeonAreaForm extends JFrame{
         dangersScroll.setPreferredSize(new Dimension(0, 100));
         center.add(dangersScroll, gbc);
 
-        // un poco de espacio al final
         gbc.gridy++;
         gbc.weighty = 1.0;
         center.add(Box.createVerticalGlue(), gbc);
 
         main.add(center, BorderLayout.CENTER);
 
-        // ----- Panel inferior con botones -----
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 
@@ -242,24 +257,31 @@ public class DungeonAreaForm extends JFrame{
         addButton.setFont(buttonFont);
         goBackButton.setFont(buttonFont);
 
-        // “Horizontal fill” para todos los botones
         buttonsRow.add(generateButton);
         buttonsRow.add(rerollButton);
         buttonsRow.add(addButton);
 
         bottom.add(buttonsRow);
         bottom.add(Box.createVerticalStrut(8));
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 
-        // Back ocupa todo el ancho
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
+
         JPanel backPanel = new JPanel(new BorderLayout());
         backPanel.add(goBackButton, BorderLayout.CENTER);
         bottom.add(backPanel);
 
         main.add(bottom, BorderLayout.SOUTH);
 
-        // Configurar frame
         setContentPane(main);
-        pack();                    // se adapta al contenido + padding
+        pack();
         setLocationRelativeTo(null);
     }
 

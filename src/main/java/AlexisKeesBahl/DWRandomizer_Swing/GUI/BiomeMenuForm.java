@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Biome;
 import AlexisKeesBahl.DWRandomizer_Swing.service.BiomeService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
@@ -34,6 +35,8 @@ public class BiomeMenuForm extends JFrame {
     private JButton generateButton;
     private JButton rerollButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton backButton;
 
     public BiomeMenuForm(BiomeService biomeService,
@@ -60,17 +63,14 @@ public class BiomeMenuForm extends JFrame {
 
     private void buildUI() {
 
-        // Fuentes
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
 
-        // Panel principal con padding
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // ---------- TÍTULO ----------
         JLabel title = new JLabel("Random biome generator");
         title.setFont(titleFont);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -81,7 +81,6 @@ public class BiomeMenuForm extends JFrame {
 
         main.add(top, BorderLayout.NORTH);
 
-        // ---------- PANEL CENTRAL ----------
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 0, 4, 0);
@@ -92,7 +91,6 @@ public class BiomeMenuForm extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Helper para crear cada fila
         biomeFormattedTextField = addField(center, gbc, "Biome:", labelFont, fieldFont);
         weatherFormattedTextField = addField(center, gbc, "Weather:", labelFont, fieldFont);
         weatherIntensityFormattedTextField = addField(center, gbc, "Weather intensity:", labelFont, fieldFont);
@@ -108,7 +106,6 @@ public class BiomeMenuForm extends JFrame {
 
         main.add(center, BorderLayout.CENTER);
 
-        // ---------- PANEL INFERIOR (BOTONES) ----------
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
 
@@ -116,6 +113,8 @@ public class BiomeMenuForm extends JFrame {
         generateButton = new JButton("Generate");
         rerollButton = new JButton("Reroll");
         exportButton = new JButton("Export");
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         generateButton.setFont(buttonFont);
         rerollButton.setFont(buttonFont);
@@ -127,8 +126,18 @@ public class BiomeMenuForm extends JFrame {
 
         bottom.add(row);
         bottom.add(Box.createVerticalStrut(8));
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 
-        // Back button ocupa toda la fila
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
+
+
         backButton = new JButton("Go back");
         backButton.setFont(buttonFont);
 
@@ -136,10 +145,11 @@ public class BiomeMenuForm extends JFrame {
         backPanel.add(backButton, BorderLayout.CENTER);
         bottom.add(backPanel);
 
+
         main.add(bottom, BorderLayout.SOUTH);
 
         setContentPane(main);
-        pack(); // Ajusta la ventana al contenido real
+        pack();
         setLocationRelativeTo(null);
     }
 
@@ -169,12 +179,14 @@ public class BiomeMenuForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         generateButton.addActionListener(e -> {
+            biome=biome.clone();
             biomeService.rollBiome(biome);
             sessionManager.add(Biome.class, biome);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
+            biome=biome.clone();
             biomeService.reRollDetails(biome);
             sessionManager.add(Biome.class, biome);
             updateFields();
@@ -186,6 +198,23 @@ public class BiomeMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export file...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Biome.class).indexOf(biome)>0){
+                int currentIndex = sessionManager.getList(Biome.class).indexOf(biome);
+                int newIndex=currentIndex-1;
+                biome = sessionManager.getList(Biome.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Biome.class).indexOf(biome)<sessionManager.getList(Biome.class).size()-1) {
+                int currentIndex = sessionManager.getList(Biome.class).indexOf(biome);
+                int newIndex = currentIndex + 1;
+                this.biome = sessionManager.getList(Biome.class).get(newIndex);
+                updateFields();
             }
         });
 

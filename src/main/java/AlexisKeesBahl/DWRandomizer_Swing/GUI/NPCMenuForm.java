@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.NPC;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.NPCService;
@@ -32,6 +33,8 @@ public class NPCMenuForm extends JFrame {
     private JButton generateButton;
     private JButton rerollButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
 
     public NPCMenuForm(
@@ -62,6 +65,9 @@ public class NPCMenuForm extends JFrame {
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         JPanel root = new JPanel();
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
@@ -114,6 +120,18 @@ public class NPCMenuForm extends JFrame {
         root.add(buttonRow);
         root.add(Box.createVerticalStrut(20));
 
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        root.add(arrowsPanel);
+        root.add(Box.createVerticalStrut(8));
+
+
         goBackButton = new JButton("Go back");
         goBackButton.setFont(buttonFont);
         goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -145,12 +163,14 @@ public class NPCMenuForm extends JFrame {
 
     private void initializeLogic() {
         generateButton.addActionListener(e -> {
+            npc=npc.clone();
             npcService.rollNPC(npc);
             sessionManager.add(NPC.class, npc);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
+            npc=npc.clone();
             if (sessionManager.getSelected(NPC.class) == null)
                 npcService.rollNPC(npc);
             else
@@ -166,6 +186,23 @@ public class NPCMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export NPC...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(NPC.class).indexOf(npc)>0){
+                int currentIndex = sessionManager.getList(NPC.class).indexOf(npc);
+                int newIndex=currentIndex-1;
+                npc = sessionManager.getList(NPC.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(NPC.class).indexOf(npc)<sessionManager.getList(NPC.class).size()-1) {
+                int currentIndex = sessionManager.getList(NPC.class).indexOf(npc);
+                int newIndex = currentIndex + 1;
+                this.npc = sessionManager.getList(NPC.class).get(newIndex);
+                updateFields();
             }
         });
 

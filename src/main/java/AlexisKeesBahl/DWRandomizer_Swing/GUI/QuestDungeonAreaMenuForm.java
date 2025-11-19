@@ -24,10 +24,11 @@ public class QuestDungeonAreaMenuForm extends JFrame {
     private final AreaService areaService;
     private final ApplicationContext context;
     private final GenericFunctions genericFunctions;
-    private JPanel panel1;
     private JButton generateButton;
     private JButton rerollButton;
     private JButton addButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
     private JFormattedTextField areaFormattedTextField;
     private JTextPane dressingTextPane;
@@ -74,13 +75,20 @@ public class QuestDungeonAreaMenuForm extends JFrame {
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e ->{
+            area=area.clone();
             areaService.rollArea(area);
+            sessionManager.add(Area.class,area);
             updateFields();
         });
 
 
         rerollButton.addActionListener(e -> {
-            areaService.rollAreaDetails(area);
+            area=area.clone();
+            if(sessionManager.getSelected(Area.class)==null)
+                areaService.rollArea(area);
+            else
+                areaService.rollAreaDetails(area);
+            sessionManager.add(Area.class,area);
             updateFields();
         });
 
@@ -88,6 +96,23 @@ public class QuestDungeonAreaMenuForm extends JFrame {
             if(dungeon.getAreas().size()<dungeon.getRooms()-1)
                 dungeon.addArea(area);
             else JOptionPane.showMessageDialog(this, "All areas set.");
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Area.class).indexOf(area)>0){
+                int currentIndex = sessionManager.getList(Area.class).indexOf(area);
+                int newIndex=currentIndex-1;
+                area = sessionManager.getList(Area.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Area.class).indexOf(area)<sessionManager.getList(Area.class).size()-1) {
+                int currentIndex = sessionManager.getList(Area.class).indexOf(area);
+                int newIndex = currentIndex + 1;
+                this.area = sessionManager.getList(Area.class).get(newIndex);
+                updateFields();
+            }
         });
 
 
@@ -125,6 +150,8 @@ public class QuestDungeonAreaMenuForm extends JFrame {
     }
 
     private void buildUI() {
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
@@ -241,6 +268,17 @@ public class QuestDungeonAreaMenuForm extends JFrame {
 
         bottom.add(buttonsRow);
         bottom.add(Box.createVerticalStrut(8));
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
+
 
         JPanel backPanel = new JPanel(new BorderLayout());
         backPanel.add(goBackButton, BorderLayout.CENTER);

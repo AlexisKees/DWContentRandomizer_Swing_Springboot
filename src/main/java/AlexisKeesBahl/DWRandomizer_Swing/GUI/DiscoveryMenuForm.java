@@ -1,5 +1,7 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
+import AlexisKeesBahl.DWRandomizer_Swing.model.Danger;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Discovery;
 import AlexisKeesBahl.DWRandomizer_Swing.service.DiscoveryService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
@@ -30,6 +32,8 @@ public class DiscoveryMenuForm extends JFrame {
     private JButton rerollSCButton;
     private JButton rerollDiscoveryButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton backButton;
 
     public DiscoveryMenuForm(ApplicationContext context,
@@ -57,6 +61,8 @@ public class DiscoveryMenuForm extends JFrame {
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         JPanel main = new JPanel(new BorderLayout());
         main.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -126,6 +132,17 @@ public class DiscoveryMenuForm extends JFrame {
         bottom.add(row2);
         bottom.add(Box.createVerticalStrut(10));
 
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        bottom.add(arrowsPanel);
+        bottom.add(Box.createVerticalStrut(8));
+
         backButton = styledButton("Go back", buttonFont);
         JPanel backRow = new JPanel(new BorderLayout());
         backRow.add(backButton, BorderLayout.CENTER);
@@ -166,19 +183,28 @@ public class DiscoveryMenuForm extends JFrame {
     private void initializeListeners() {
 
         generateButton.addActionListener(e -> {
+            discovery=discovery.clone();
             discoveryService.rollDiscovery(discovery);
             sessionManager.add(Discovery.class, discovery);
             updateFields();
         });
 
         rerollSCButton.addActionListener(e -> {
-            discoveryService.rollSubcategory(discovery);
+            discovery=discovery.clone();
+            if(sessionManager.getSelected(Danger.class)==null)
+                discoveryService.rollDiscovery(discovery);
+            else
+                discoveryService.rollSubcategory(discovery);
             sessionManager.add(Discovery.class, discovery);
             updateFields();
         });
 
         rerollDiscoveryButton.addActionListener(e -> {
-            discoveryService.rollPrompt(discovery);
+            discovery=discovery.clone();
+            if(sessionManager.getSelected(Danger.class)==null)
+                discoveryService.rollDiscovery(discovery);
+            else
+                discoveryService.rollPrompt(discovery);
             sessionManager.add(Discovery.class, discovery);
             updateFields();
         });
@@ -189,6 +215,23 @@ public class DiscoveryMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export discovery...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Discovery.class).indexOf(discovery)>0){
+                int currentIndex = sessionManager.getList(Discovery.class).indexOf(discovery);
+                int newIndex=currentIndex-1;
+                discovery = sessionManager.getList(Discovery.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Discovery.class).indexOf(discovery)<sessionManager.getList(Discovery.class).size()-1) {
+                int currentIndex = sessionManager.getList(Discovery.class).indexOf(discovery);
+                int newIndex = currentIndex + 1;
+                this.discovery = sessionManager.getList(Discovery.class).get(newIndex);
+                updateFields();
             }
         });
 

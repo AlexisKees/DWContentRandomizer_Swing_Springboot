@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Follower;
 import AlexisKeesBahl.DWRandomizer_Swing.service.FollowerService;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
@@ -22,6 +23,8 @@ public class FollowerMenuForm extends JFrame {
 
     private Follower follower;
 
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
     private JButton generateButton;
     private JButton rerollButton;
@@ -66,6 +69,9 @@ public class FollowerMenuForm extends JFrame {
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
+
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
 
         setTitle("Random follower generator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -183,22 +189,36 @@ public class FollowerMenuForm extends JFrame {
         c.gridy = 2;
         main.add(buttonsRow, c);
 
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+        c.gridy = 3;
+        main.add(arrowsPanel, c);
+
+        c.gridy = 4;
+        main.add(Box.createVerticalStrut(8), c);
+
         goBackButton = new JButton("Go back");
         goBackButton.setFont(buttonFont);
-        c.gridy = 3;
+        c.gridy = 5;
         main.add(goBackButton, c);
 
         setContentPane(main);
     }
 
+
     private void initializeActions() {
         generateButton.addActionListener(e -> {
+            follower=follower.clone();
             followerService.rollFollower(follower);
             sessionManager.add(Follower.class, follower);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
+            follower=follower.clone();
             if (sessionManager.getSelected(Follower.class) == null)
                 followerService.rollFollower(follower);
             else
@@ -214,6 +234,22 @@ public class FollowerMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export follower...");
+            }
+        });
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Follower.class).indexOf(follower)>0){
+                int currentIndex = sessionManager.getList(Follower.class).indexOf(follower);
+                int newIndex=currentIndex-1;
+                follower = sessionManager.getList(Follower.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Follower.class).indexOf(follower)<sessionManager.getList(Follower.class).size()-1) {
+                int currentIndex = sessionManager.getList(Follower.class).indexOf(follower);
+                int newIndex = currentIndex + 1;
+                this.follower = sessionManager.getList(Follower.class).get(newIndex);
+                updateFields();
             }
         });
 

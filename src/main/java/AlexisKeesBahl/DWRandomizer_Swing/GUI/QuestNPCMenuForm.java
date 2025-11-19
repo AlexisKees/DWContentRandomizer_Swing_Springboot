@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.NPC;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Quest;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
@@ -26,6 +27,8 @@ public class QuestNPCMenuForm extends JFrame {
     private JButton goBackButton;
     private JButton generateButton;
     private JButton rerollButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton exportButton;
     private JFormattedTextField npcField;
     private JFormattedTextField genderField;
@@ -59,6 +62,9 @@ public class QuestNPCMenuForm extends JFrame {
     }
 
     private void buildUI() {
+
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
@@ -115,6 +121,18 @@ public class QuestNPCMenuForm extends JFrame {
         root.add(buttonRow);
         root.add(Box.createVerticalStrut(20));
 
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        root.add(arrowsPanel);
+        root.add(Box.createVerticalStrut(8));
+
+
         goBackButton = new JButton("Go back");
         goBackButton.setFont(buttonFont);
         goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -149,12 +167,15 @@ public class QuestNPCMenuForm extends JFrame {
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e->{
+            npc=npc.clone();
             npcService.rollNPC(npc);
+            sessionManager.add(NPC.class,npc);
             quest.setQuestGiver(npc);
             updateFields();
         });
 
         rerollButton.addActionListener(e->{
+            npc=npc.clone();
             if(sessionManager.getSelected(NPC.class)==null)
                 npcService.rollNPC(npc);
             else
@@ -170,6 +191,23 @@ public class QuestNPCMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this,"Check your files!");
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(this, "Couldn't export npc...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(NPC.class).indexOf(npc)>0){
+                int currentIndex = sessionManager.getList(NPC.class).indexOf(npc);
+                int newIndex=currentIndex-1;
+                npc = sessionManager.getList(NPC.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(NPC.class).indexOf(npc)<sessionManager.getList(NPC.class).size()-1) {
+                int currentIndex = sessionManager.getList(NPC.class).indexOf(npc);
+                int newIndex = currentIndex + 1;
+                this.npc = sessionManager.getList(NPC.class).get(newIndex);
+                updateFields();
             }
         });
 

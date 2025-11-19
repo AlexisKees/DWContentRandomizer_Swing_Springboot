@@ -25,8 +25,9 @@ public class QuestDungeonMenuForm extends JFrame {
     private final GenericFunctions genericFunctions;
     private Dungeon dungeon;
     private Quest quest;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
-    private JPanel panel1;
     private JFormattedTextField nameTextField;
     private JFormattedTextField sizeFormattedTextField;
     private JFormattedTextField roomsFormattedTextField;
@@ -66,13 +67,14 @@ public class QuestDungeonMenuForm extends JFrame {
         initializeForm(context);
     }
     private void buildUI() {
-        // Fuentes
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
+
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font buttonFont = new Font("Adobe Jenson Pro Lt", Font.ITALIC, 16);
 
-        // Instanciar componentes
         nameTextField = new JFormattedTextField();
         sizeFormattedTextField = new JFormattedTextField();
         roomsFormattedTextField = new JFormattedTextField();
@@ -95,19 +97,16 @@ public class QuestDungeonMenuForm extends JFrame {
         exportButton = new JButton("Export");
         goBackButton = new JButton("Back");
 
-        // Panel raíz
         JPanel root = new JPanel();
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
         root.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // Título
         JLabel title = new JLabel("Random dungeon generator");
         title.setFont(titleFont);
         title.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         root.add(title);
         root.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Helper: fila label + field
         BiFunction<JLabel, JComponent, JPanel> lf = (lbl, field) -> {
             JPanel p = new JPanel(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
@@ -133,11 +132,9 @@ public class QuestDungeonMenuForm extends JFrame {
             return p;
         };
 
-        // Name
         root.add(lf.apply(new JLabel("Name:"), nameTextField));
         root.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        // Size / Rooms / Exits
         JPanel sizeRow = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(2, 4, 2, 4);
@@ -178,7 +175,6 @@ public class QuestDungeonMenuForm extends JFrame {
         root.add(sizeRow);
         root.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        // Resto de campos simples
         root.add(lf.apply(themesLabel, themesFormattedTextField));
         root.add(Box.createRigidArea(new Dimension(0, 5)));
 
@@ -200,7 +196,6 @@ public class QuestDungeonMenuForm extends JFrame {
         root.add(lf.apply(new JLabel("Cause of ruin:"), causeOfRuinFormattedTextField));
         root.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Áreas
         areasLabel.setFont(labelFont);
         areasLabel.setAlignmentX(JComponent.LEFT_ALIGNMENT);
 
@@ -215,7 +210,6 @@ public class QuestDungeonMenuForm extends JFrame {
         root.add(areasScroll);
         root.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Botones principales
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 
@@ -230,7 +224,18 @@ public class QuestDungeonMenuForm extends JFrame {
         root.add(buttons);
         root.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // Botón Back
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        root.add(arrowsPanel);
+        root.add(Box.createVerticalStrut(8));
+
+
         goBackButton.setFont(buttonFont);
         goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         root.add(goBackButton);
@@ -244,7 +249,9 @@ public class QuestDungeonMenuForm extends JFrame {
         setLocationRelativeTo(null);
 
         generateButton.addActionListener(e -> {
+            dungeon=dungeon.clone();
             dungeonService.rollDungeon(dungeon);
+            sessionManager.add(Dungeon.class,dungeon);
             quest.setDungeon(dungeon);
             updateFields();
         });
@@ -266,6 +273,23 @@ public class QuestDungeonMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this,"Check your files!");
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(this,"Couldn't export dungeon");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Dungeon.class).indexOf(dungeon)>0){
+                int currentIndex = sessionManager.getList(Dungeon.class).indexOf(dungeon);
+                int newIndex=currentIndex-1;
+                dungeon = sessionManager.getList(Dungeon.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Dungeon.class).indexOf(dungeon)<sessionManager.getList(Dungeon.class).size()-1) {
+                int currentIndex = sessionManager.getList(Dungeon.class).indexOf(dungeon);
+                int newIndex = currentIndex + 1;
+                this.dungeon = sessionManager.getList(Dungeon.class).get(newIndex);
+                updateFields();
             }
         });
 

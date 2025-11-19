@@ -1,5 +1,6 @@
 package AlexisKeesBahl.DWRandomizer_Swing.GUI;
 
+import AlexisKeesBahl.DWRandomizer_Swing.model.Area;
 import AlexisKeesBahl.DWRandomizer_Swing.model.Steading;
 import AlexisKeesBahl.DWRandomizer_Swing.service.GenericFunctions;
 import AlexisKeesBahl.DWRandomizer_Swing.service.SteadingService;
@@ -32,6 +33,8 @@ public class SteadingMenuForm extends JFrame {
     private JButton generateButton;
     private JButton rerollButton;
     private JButton exportButton;
+    private JButton leftButton;
+    private JButton rightButton;
     private JButton goBackButton;
 
     public SteadingMenuForm(
@@ -57,6 +60,10 @@ public class SteadingMenuForm extends JFrame {
 
 
     private void buildUI() {
+
+        leftButton = new JButton("←");
+        rightButton = new JButton("→");
+
         Font titleFont = new Font("Adobe Jenson Pro", Font.BOLD, 24);
         Font labelFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
         Font fieldFont = new Font("Adobe Jenson Pro Lt", Font.PLAIN, 16);
@@ -111,6 +118,18 @@ public class SteadingMenuForm extends JFrame {
         root.add(buttonRow);
         root.add(Box.createVerticalStrut(20));
 
+        JPanel arrowsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+
+        leftButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        rightButton.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        arrowsPanel.add(leftButton);
+        arrowsPanel.add(rightButton);
+
+        root.add(arrowsPanel);
+        root.add(Box.createVerticalStrut(8));
+
+
         goBackButton = new JButton("Go back");
         goBackButton.setFont(buttonFont);
         goBackButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -138,12 +157,14 @@ public class SteadingMenuForm extends JFrame {
 
     private void initializeLogic() {
         generateButton.addActionListener(e -> {
+            steading=steading.clone();
             steadingService.rollSteading(steading);
             sessionManager.add(Steading.class, steading);
             updateFields();
         });
 
         rerollButton.addActionListener(e -> {
+            steading=steading.clone();
             if (sessionManager.getSelected(Steading.class) == null)
                 steadingService.rollSteading(steading);
             else
@@ -159,6 +180,23 @@ public class SteadingMenuForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Check your files!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Couldn't export steading...");
+            }
+        });
+
+        leftButton.addActionListener(e->{
+            if(sessionManager.getList(Steading.class).indexOf(steading)>0){
+                int currentIndex = sessionManager.getList(Steading.class).indexOf(steading);
+                int newIndex=currentIndex-1;
+                steading = sessionManager.getList(Steading.class).get(newIndex);
+                updateFields();}
+        });
+
+        rightButton.addActionListener(e->{
+            if(sessionManager.getList(Steading.class).indexOf(steading)<sessionManager.getList(Steading.class).size()-1) {
+                int currentIndex = sessionManager.getList(Steading.class).indexOf(steading);
+                int newIndex = currentIndex + 1;
+                this.steading = sessionManager.getList(Steading.class).get(newIndex);
+                updateFields();
             }
         });
 
