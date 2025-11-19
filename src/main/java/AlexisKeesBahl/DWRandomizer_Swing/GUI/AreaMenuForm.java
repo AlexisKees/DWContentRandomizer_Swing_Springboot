@@ -233,9 +233,7 @@ public class AreaMenuForm extends JFrame {
         leftButton.addActionListener(e->{
             if(sessionManager.getList(Area.class).indexOf(area)>0){
             int currentIndex = sessionManager.getList(Area.class).indexOf(area);
-                System.out.println("current index: "+currentIndex);
             int newIndex=currentIndex-1;
-                System.out.println("new index: "+newIndex);
             area = sessionManager.getList(Area.class).get(newIndex);
             updateFields();}
         });
@@ -243,9 +241,7 @@ public class AreaMenuForm extends JFrame {
         rightButton.addActionListener(e->{
             if(sessionManager.getList(Area.class).indexOf(area)<sessionManager.getList(Area.class).size()-1) {
                 int currentIndex = sessionManager.getList(Area.class).indexOf(area);
-                System.out.println("current index: "+currentIndex);
                 int newIndex = currentIndex + 1;
-                System.out.println("new index: "+newIndex);
                 area = sessionManager.getList(Area.class).get(newIndex);
                 updateFields();
             }

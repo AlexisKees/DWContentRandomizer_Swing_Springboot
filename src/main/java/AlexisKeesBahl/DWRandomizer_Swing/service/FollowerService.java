@@ -156,7 +156,6 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
             follower.setArmor(follower.getArmor()+1);
             follower.setArmorType(follower.getArmorType()+" and a shield");
         }
-        System.out.println("Follower details OK");
 
     }
 
